@@ -21,14 +21,19 @@ Base URL: `<baseurl>/v1/departments/`
 
 ## 2. Endpoint Details
 
-| Endpoint                | Method | Auth Required | Description                            |
-| ----------------------- | ------ | ------------- | -------------------------------------- |
-| /                       | GET    | `yes`         | Fetch list of all departments          |
-| /?school_id={school_id} | GET    | `yes`         | Fetch departments filtered by school   |
-| /                       | POST   | `yes`         | Create a new department (Admin)        |
-| /{department_id}        | GET    | `yes`         | Fetch details of a specific department |
-| /{department_id}        | PUT    | `yes`         | Update department info (Admin)         |
-| /{department_id}        | DELETE | `yes`         | Delete a department (Admin)            |
+| Endpoint         | Method | Auth Required | Description                            |
+| ---------------- | ------ | ------------- | -------------------------------------- |
+| /                | GET    | `yes`         | Fetch list of all departments          |
+| /                | POST   | `yes`         | Create a new department (Admin)        |
+| /{department_id} | GET    | `yes`         | Fetch details of a specific department |
+| /{department_id} | PUT    | `yes`         | Update department info (Admin)         |
+| /{department_id} | DELETE | `yes`         | Delete a department (Admin)            |
+
+**Query Parameters for GET /contents/**
+
+| Parameter | Type | Description                  | Required |
+| --------- | ---- | ---------------------------- | -------- |
+| schoolId  | UUID | Filter departments by school | `no`     |
 
 ---
 
