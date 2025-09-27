@@ -31,9 +31,10 @@ Base URL: `<baseurl>/v1/contents/`
 
 **Query Parameters for GET /contents/**
 
-| Parameter | Type | Description                  | Required |
-| --------- | ---- | ---------------------------- | -------- |
-| courseId  | UUID | Filter contents by course_id | `no`     |
+| Parameter | Type   | Description                             | Required |
+| --------- | ------ | --------------------------------------- | -------- |
+| courseId  | UUID   | Filter contents by course_id            | `no`     |
+| search    | STRING | Filter content by content title or tags | `no`     |
 
 ---
 

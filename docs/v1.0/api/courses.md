@@ -31,11 +31,12 @@ Base URL: `<baseurl>/v1/courses/`
 
 **Query Parameters for GET /courses/**
 
-| Parameter    | Type | Description                            | Required |
-| ------------ | ---- | -------------------------------------- | -------- |
-| departmentId | UUID | Filter courses by department           | `no`     |
-| year         | INT  | Filter courses by year of offering     | `no`     |
-| semester     | INT  | Filter courses by semester of offering | `no`     |
+| Parameter    | Type   | Description                            | Required |
+| ------------ | ------ | -------------------------------------- | -------- |
+| departmentId | UUID   | Filter courses by department           | `no`     |
+| year         | INT    | Filter courses by year of offering     | `no`     |
+| semester     | INT    | Filter courses by semester of offering | `no`     |
+| search       | STRING | Filter courses by course code or tags  | `no`     |
 
 ---
 
