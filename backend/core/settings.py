@@ -15,6 +15,7 @@ load_dotenv(BASE_DIR / ".env")
 # Security
 # -------------------------------
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default-secret")
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
 
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "corsheaders",
 
     "users",
 ]
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -49,7 +52,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 AUTH_USER_MODEL = "users.User"
-
 
 TEMPLATES: list[Any] = [
     {
@@ -123,6 +125,13 @@ SIMPLE_JWT: dict[str, Any] = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# -------------------------------
+# CORS configuration
+# -------------------------------
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")
+CORS_ALLOW_CREDENTIALS = True
+
 
 # -------------------------------
 # ANSI Color Codes for Logging

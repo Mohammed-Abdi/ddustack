@@ -5,7 +5,6 @@ from django.contrib.auth import get_user_model
 from django.core.wsgi import get_wsgi_application
 from django.db.utils import OperationalError
 
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
 application = get_wsgi_application()
