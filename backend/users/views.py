@@ -1,6 +1,8 @@
 # type: ignore
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from google.auth.transport import requests as google_requests
+from google.oauth2 import id_token
 from rest_framework import generics, permissions, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -119,3 +121,41 @@ class UserListView(generics.ListAPIView):
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAdminUser]
     pagination_class = UserPagination
+
+
+class GoogleAuthView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        token = request.data.get("id_token")
+        if not token:
+            return Response({"detail": "id_token is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            id_info = id_token.verify_oauth2_token(token, google_requests.Request(), settings.GOOGLE_CLIENT_ID)
+
+            email = id_info.get("email")
+            provider_id = id_info.get("sub")
+            first_name = id_info.get("given_name", "")
+            last_name = id_info.get("family_name", "")
+
+            if not email or not provider_id:
+                return Response({"detail": "Invalid Google token."}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user = User.objects.get(email=email)
+                if user.provider != "google" or user.provider_id != provider_id:
+                    user.provider = "google"
+                    user.provider_id = provider_id
+                    user.save(update_fields=["provider", "provider_id"])
+            except User.DoesNotExist:
+                user = User.objects.create(email=email, first_name=first_name, last_name=last_name, provider="google", provider_id=provider_id, is_active=True)
+
+            tokens = get_tokens_for_user(user)
+
+            response = Response({"access_token": tokens["access_token"], "user": UserSerializer(user).data}, status=status.HTTP_200_OK)
+            response.set_cookie(key="refresh_token", value=tokens["refresh_token"], httponly=True, secure=not settings.DEBUG, samesite="Lax", max_age=30 * 24 * 60 * 60)
+            return response
+
+        except ValueError:
+            return Response({"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
