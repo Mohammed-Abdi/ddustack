@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 25.9.0
+    hooks:
+      - id: black
+        language_version: python3
+        files: \.py$
+        additional_dependencies: []
+        args: ['--line-length=200']
+
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+        language_version: python3
+        files: \.py$
+        args: ['--profile', 'black']
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        language_version: python3
+        files: \.py$
+        args: ['--max-line-length=200']
