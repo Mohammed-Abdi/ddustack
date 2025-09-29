@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+
+    "users",
 ]
 
 # -------------------------------
@@ -46,6 +48,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "core.urls"
+AUTH_USER_MODEL = "users.User"
+
 
 TEMPLATES: list[Any] = [
     {
@@ -119,3 +123,10 @@ SIMPLE_JWT: dict[str, Any] = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# -------------------------------
+# ANSI Color Codes for Logging
+# -------------------------------
+LOG_COLOR_SUCCESS = "\033[92m"
+LOG_COLOR_FAILURE = "\033[91m"
+LOG_COLOR_RESET = "\033[0m"
