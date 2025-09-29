@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+
     "users",
 ]
 
@@ -48,6 +49,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 AUTH_USER_MODEL = "users.User"
+
 
 TEMPLATES: list[Any] = [
     {
