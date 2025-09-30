@@ -2,34 +2,40 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-09-27  
-**Status:** Draft
+**Date:** 2025-09-30  
+**Status:** Updated
 
 ---
 
 ## 1. Overview
 
-The Users API handles user authentication, registration, profile management, and administrative user operations. It supports JWT authentication for secure access. Typical use cases include:
+The Users API handles user authentication, registration, Google OAuth login, profile management, and administrative user operations.  
+It supports **JWT authentication** with **refresh tokens stored as HttpOnly cookies** for secure access.
 
-- Student registration and login.
+Typical use cases include:
+
+- STUDENT registration and login (email/password or Google).
 - Fetching and updating user profile information.
 - Admin management of users (CRUD operations).
 
-Base URL: `<baseurl>/v1/users/`
+Base URL: `<baseurl>/v1/`
 
 ---
 
 ## 2. Endpoint Details
 
-| Endpoint   | Method | Auth Required | Description                              |
-| ---------- | ------ | ------------- | ---------------------------------------- |
-| /register  | POST   | `no`          | Register a new user                      |
-| /login     | POST   | `no`          | Authenticate user and return JWT         |
-| /me        | GET    | `yes`         | Fetch current user profile               |
-| /me        | PUT    | `yes`         | Update current user profile              |
-| /{user_id} | GET    | `yes`         | Fetch details of a specific user (Admin) |
-| /{user_id} | PUT    | `yes`         | Update user info (Admin)                 |
-| /{user_id} | DELETE | `yes`         | Delete a user (Admin)                    |
+| Endpoint         | Method | Auth Required  | Description                           |
+| ---------------- | ------ | -------------- | ------------------------------------- |
+| /auth/register   | POST   | `no`           | Register a new user                   |
+| /auth/login      | POST   | `no`           | Authenticate user with email/password |
+| /auth/google     | POST   | `no`           | Authenticate user with Google OAuth   |
+| /auth/refresh    | POST   | `yes (cookie)` | Refresh JWT access token using cookie |
+| /users/me        | GET    | `yes`          | Fetch current user profile            |
+| /users/me        | PUT    | `yes`          | Update current user profile           |
+| /users/          | GET    | `yes (admin)`  | List all users                        |
+| /users/{user_id} | GET    | `yes (admin)`  | Fetch details of a specific user      |
+| /users/{user_id} | PATCH  | `yes (admin)`  | Update user info                      |
+| /users/{user_id} | DELETE | `yes (admin)`  | Delete a user                         |
 
 ---
 
@@ -39,7 +45,7 @@ Base URL: `<baseurl>/v1/users/`
 
 **Request**
 
-#### POST `/users/register`
+#### POST `/auth/register`
 
 ```json
 {
@@ -54,17 +60,17 @@ Base URL: `<baseurl>/v1/users/`
 
 ```json
 {
-  "access_token": "jwt_access_token",
+  "access": "jwt_access_token",
   "user": {
     "id": "uuid",
     "first_name": "Mohammed",
     "last_name": "Abdi",
     "email": "mohammed@example.com",
-    "role": "student",
+    "role": "STUDENT",
     "is_active": true,
-    "department_id": "uuid",
-    "year": 3,
-    "semester": 1
+    "department_id": null,
+    "year": null,
+    "semester": null
   }
 }
 ```
@@ -75,7 +81,7 @@ Base URL: `<baseurl>/v1/users/`
 
 **Request**
 
-#### POST `/users/login`
+#### POST `/auth/login`
 
 ```json
 {
@@ -88,24 +94,75 @@ Base URL: `<baseurl>/v1/users/`
 
 ```json
 {
-  "access_token": "jwt_access_token",
+  "access": "jwt_access_token",
   "user": {
     "id": "uuid",
     "first_name": "Mohammed",
     "last_name": "Abdi",
     "email": "mohammed@example.com",
-    "role": "student",
+    "role": "STUDENT",
     "is_active": true,
-    "department_id": "uuid",
-    "year": 3,
-    "semester": 1
+    "department_id": null,
+    "year": null,
+    "semester": null
   }
 }
 ```
 
 ---
 
-### 3.3 Get Current User Profile
+### 3.3 Google Auth
+
+**Request**
+
+#### POST `/auth/google`
+
+```json
+{
+  "token": "google_id_token"
+}
+```
+
+**Response** `200 OK`
+
+```json
+{
+  "access": "jwt_access_token",
+  "user": {
+    "id": "uuid",
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "email": "jane@example.com",
+    "role": "STUDENT",
+    "is_active": true,
+    "department_id": "uuid",
+    "year": 2,
+    "semester": 2
+  }
+}
+```
+
+---
+
+### 3.4 Refresh Token
+
+**Request**
+
+#### POST `/auth/refresh`
+
+> Refresh token must be stored in HttpOnly cookie.
+
+**Response** `200 OK`
+
+```json
+{
+  "access": "new_jwt_access_token"
+}
+```
+
+---
+
+### 3.5 Get Current User Profile
 
 **Request**
 
@@ -121,7 +178,7 @@ Base URL: `<baseurl>/v1/users/`
   "first_name": "Mohammed",
   "last_name": "Abdi",
   "email": "mohammed@example.com",
-  "role": "student",
+  "role": "STUDENT",
   "is_active": true,
   "department_id": "uuid",
   "year": 3,
@@ -131,7 +188,7 @@ Base URL: `<baseurl>/v1/users/`
 
 ---
 
-### 3.4 Update Current User Profile
+### 3.6 Update Current User Profile
 
 **Request**
 
@@ -141,8 +198,6 @@ Base URL: `<baseurl>/v1/users/`
 
 ```json
 {
-  "first_name": "Mohammed",
-  "last_name": "Abdi",
   "department_id": "uuid",
   "year": 3,
   "semester": 2
@@ -157,7 +212,7 @@ Base URL: `<baseurl>/v1/users/`
   "first_name": "Mohammed",
   "last_name": "Abdi",
   "email": "mohammed@example.com",
-  "role": "student",
+  "role": "STUDENT",
   "is_active": true,
   "department_id": "uuid",
   "year": 3,
@@ -167,13 +222,80 @@ Base URL: `<baseurl>/v1/users/`
 
 ---
 
-### 3.5 Admin: Get User by ID
+### 3.7 Admin: List Users
+
+**Request**
+
+#### GET `/users/`
+
+> Authorization: Bearer <admin_access_token>
+
+**Response** `200 OK`
+
+```json
+{
+  "count": 50,
+  "next": "https://<baseurl>/v1/users/?page=3",
+  "previous": "https://<baseurl>/v1/users/?page=1",
+  "results": [
+    {
+      "id": "20868736-c83a-4f97-90d3-9eebd03852b0",
+      "first_name": "Emily",
+      "last_name": "Johnson",
+      "email": "emily.johnson@example.com",
+      "provider": "google",
+      "provider_id": "117785436858300136844",
+      "role": "STUDENT",
+      "is_active": true,
+      "department_id": "uuid",
+      "year": 3,
+      "semester": 1,
+      "date_joined": "2025-09-29T14:31:11.296366Z",
+      "updated_at": "2025-09-29T14:31:11.296393Z"
+    },
+    {
+      "id": "aa601770-e5ae-4dfb-81f0-41cd2e55c6a7",
+      "first_name": "Michael",
+      "last_name": "Smith",
+      "email": "michael.smith@example.com",
+      "provider": "email",
+      "provider_id": null,
+      "role": "STUDENT",
+      "is_active": true,
+      "department_id": null,
+      "year": null,
+      "semester": null,
+      "date_joined": "2025-09-29T12:01:57.613766Z",
+      "updated_at": "2025-09-29T12:01:57.613787Z"
+    },
+    {
+      "id": "6b4acf9b-c4e2-4bba-935c-32240012a2b8",
+      "first_name": "Sophia",
+      "last_name": "Williams",
+      "email": "sophia.williams@example.com",
+      "provider": "google",
+      "provider_id": "117603110570559130224",
+      "role": "ADMIN",
+      "is_active": true,
+      "department_id": "uuid",
+      "year": 3,
+      "semester": 2,
+      "date_joined": "2025-09-29T11:56:55.029458Z",
+      "updated_at": "2025-09-29T11:56:55.029475Z"
+    }
+  ]
+}
+```
+
+---
+
+### 3.8 Admin: Get User by ID
 
 **Request**
 
 #### GET `/users/uuid`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
 **Response** `200 OK`
 
@@ -182,14 +304,14 @@ Base URL: `<baseurl>/v1/users/`
   "id": "uuid",
   "first_name": "Jane",
   "last_name": "Smith",
-  "email": "jane@example.com",
-  "provider": null,
-  "provider_id": null,
-  "role": "admin",
+  "email": "jane.smith@example.com",
+  "provider": "google",
+  "provider_id": "117603110570559130224",
+  "role": "STUDENT",
   "is_active": true,
-  "department_id": null,
-  "year": null,
-  "semester": null,
+  "department_id": "uuid",
+  "year": 4,
+  "semester": 1,
   "date_joined": "2025-09-27T10:00:00Z",
   "updated_at": "2025-09-27T10:05:00Z"
 }
@@ -197,19 +319,18 @@ Base URL: `<baseurl>/v1/users/`
 
 ---
 
-### 3.6 Admin: Update User
+### 3.9 Admin: Update User
 
 **Request**
 
-#### PUT `/users/uuid`
+#### PATCH `/users/uuid`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
 ```json
 {
-  "first_name": "Jane",
-  "last_name": "Abdi",
-  "role": "moderator"
+  "role": "MODERATOR",
+  "semester": 2
 }
 ```
 
@@ -219,29 +340,29 @@ Base URL: `<baseurl>/v1/users/`
 {
   "id": "uuid",
   "first_name": "Jane",
-  "last_name": "Abdi",
-  "email": "jane@example.com",
-  "provider": null,
-  "provider_id": null,
-  "role": "moderator",
+  "last_name": "Smith",
+  "email": "jane.smith@example.com",
+  "provider": "google",
+  "provider_id": "117603110570559130224",
+  "role": "MODERATOR",
   "is_active": true,
-  "department_id": null,
-  "year": null,
-  "semester": null,
+  "department_id": "uuid",
+  "year": 4,
+  "semester": 2,
   "date_joined": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T12:10:00Z"
+  "updated_at": "2025-09-27T10:05:00Z"
 }
 ```
 
 ---
 
-### 3.7 Admin: Delete User
+### 3.10 Admin: Delete User
 
 **Request**
 
 #### DELETE `/users/uuid`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
 **Response** `200 OK`
 
@@ -277,6 +398,6 @@ Example:
 
 ## 5. Notes / References
 
-- Related features: Personalized Feed, Saved Courses.
-- JWT tokens expire according to system configuration.
+- Refresh token is stored in HttpOnly cookie for security.
+- JWT access tokens expire according to system configuration.
 - Related database tables: [users](../architecture/database-schema.md/#1-users)
