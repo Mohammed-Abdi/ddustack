@@ -2,8 +2,8 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-09-27  
-**Status:** Draft
+**Date:** 2025-10-01  
+**Status:** Updated
 
 ---
 
@@ -29,10 +29,10 @@ Base URL: `<baseurl>/v1/notifications/`
 | Endpoint | Method | Auth Required | Description                         |
 | -------- | ------ | ------------- | ----------------------------------- |
 | /        | GET    | `yes`         | List notifications for current user |
-| /        | POST   | `yes`         | Send a notification (Admin)         |
+| /        | POST   | `yes (admin)` | Send a notification                 |
 | /{id}    | GET    | `yes`         | Fetch a specific notification       |
 | /{id}    | PUT    | `yes`         | Mark notification as read           |
-| /{id}    | DELETE | `yes`         | Delete a notification (Admin)       |
+| /{id}    | DELETE | `yes (admin)` | Delete a notification               |
 
 ---
 
@@ -49,17 +49,31 @@ Base URL: `<baseurl>/v1/notifications/`
 **Response** `200 OK`
 
 ```json
-[
-  {
-    "id": "uuid",
-    "title": "New Lecture Available",
-    "message": "Lecture 2 has been uploaded for SE301.",
-    "type": "info",
-    "is_read": false,
-    "created_at": "2025-09-27T12:00:00Z",
-    "updated_at": "2025-09-27T12:00:00Z"
-  }
-]
+{
+  "count": 42,
+  "next": "https://<baseurl>/v1/notifications/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": "uuid",
+      "title": "New Lecture Available",
+      "message": "Lecture 2 has been uploaded for SE301.",
+      "type": "INFO",
+      "is_read": false,
+      "created_at": "2025-09-27T12:00:00Z",
+      "updated_at": "2025-09-27T12:00:00Z"
+    },
+    {
+      "id": "uuid",
+      "title": "Assignment Due Reminder",
+      "message": "Assignment 1 deadline is tomorrow for SE301.",
+      "type": "REMINDER",
+      "is_read": false,
+      "created_at": "2025-09-27T12:05:00Z",
+      "updated_at": "2025-09-27T12:05:00Z"
+    }
+  ]
+}
 ```
 
 ---
@@ -77,7 +91,7 @@ Base URL: `<baseurl>/v1/notifications/`
   "course_id": "uuid",
   "title": "New Lecture Available",
   "message": "Lecture 2 has been uploaded for SE301.",
-  "type": "info",
+  "type": "INFO",
   "all_users": false
 }
 ```
@@ -118,7 +132,7 @@ Base URL: `<baseurl>/v1/notifications/`
   "id": "uuid",
   "title": "New Lecture Available",
   "message": "Lecture 2 has been uploaded for SE301.",
-  "type": "info",
+  "type": "INFO",
   "is_read": false,
   "created_at": "2025-09-27T12:00:00Z",
   "updated_at": "2025-09-27T12:00:00Z"
@@ -148,7 +162,7 @@ Base URL: `<baseurl>/v1/notifications/`
   "id": "uuid",
   "title": "New Lecture Available",
   "message": "Lecture 2 has been uploaded for SE301.",
-  "type": "info",
+  "type": "INFO",
   "is_read": true,
   "created_at": "2025-09-27T12:00:00Z",
   "updated_at": "2025-09-27T12:30:00Z"
@@ -165,13 +179,7 @@ Base URL: `<baseurl>/v1/notifications/`
 
 > Authorization: Bearer <access_token>
 
-**Response** `200 OK`
-
-```json
-{
-  "message": "Notification deleted successfully."
-}
-```
+**Response** `204 No Content`
 
 ---
 

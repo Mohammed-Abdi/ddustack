@@ -2,8 +2,8 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-09-27  
-**Status:** Draft
+**Date:** 2025-10-01  
+**Status:** Updated
 
 ---
 
@@ -42,13 +42,23 @@ Base URL: `<baseurl>/v1/saved-courses/`
 **Response** `200 OK`
 
 ```json
-[
-  {
-    "id": "uuid",
-    "course_id": "uuid",
-    "saved_at": "2025-09-27T12:00:00Z"
-  }
-]
+{
+  "count": 42,
+  "next": "https://<baseurl>/v1/saved-courses/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": "uuid",
+      "course_id": "uuid",
+      "saved_at": "2025-09-27T12:00:00Z"
+    },
+    {
+      "id": "uuid",
+      "course_id": "uuid",
+      "saved_at": "2025-09-27T12:05:00Z"
+    }
+  ]
+}
 ```
 
 ---
@@ -88,13 +98,7 @@ Base URL: `<baseurl>/v1/saved-courses/`
 
 > Authorization: Bearer <access_token>
 
-**Response** `200 OK`
-
-```json
-{
-  "message": "Saved course removed successfully."
-}
-```
+**Response** `204 No Content`
 
 ---
 
