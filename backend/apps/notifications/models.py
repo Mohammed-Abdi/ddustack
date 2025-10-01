@@ -20,6 +20,9 @@ class Notification(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = "notifications"
+        verbose_name = "Notification"
+        verbose_name_plural = "Notifications"
         indexes = [
             models.Index(fields=["user_id"]),
             models.Index(fields=["is_read"]),

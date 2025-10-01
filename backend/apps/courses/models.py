@@ -28,6 +28,8 @@ class Course(models.Model):
 
     class Meta:
         db_table = "courses"
+        verbose_name = "Course"
+        verbose_name_plural = "Courses"
         indexes = [
             models.Index(fields=["code"]),
             models.Index(fields=["tags"]),

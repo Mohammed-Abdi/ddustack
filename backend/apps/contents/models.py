@@ -23,6 +23,9 @@ class Content(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = "contents"
+        verbose_name = "Content"
+        verbose_name_plural = "Contents"
         indexes = [
             models.Index(fields=["course_id"]),
             models.Index(fields=["type"]),

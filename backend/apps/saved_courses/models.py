@@ -12,6 +12,9 @@ class SavedCourse(models.Model):
     saved_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        db_table = "saved_courses"
+        verbose_name = "Saved Course"
+        verbose_name_plural = "Saved Courses"
         unique_together = ("user_id", "course_id")
         indexes = [
             models.Index(fields=["user_id"]),
