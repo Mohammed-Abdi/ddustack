@@ -2,8 +2,8 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-09-27  
-**Status:** Draft
+**Date:** 2025-10-01  
+**Status:** Update
 
 ---
 
@@ -21,13 +21,13 @@ Base URL: `<baseurl>/v1/courses/`
 
 ## 2. Endpoint Details
 
-| Endpoint     | Method | Auth Required | Description                                     |
-| ------------ | ------ | ------------- | ----------------------------------------------- |
-| /            | GET    | `yes`         | Fetch list of all courses with optional filters |
-| /            | POST   | `yes`         | Create a new course (Admin)                     |
-| /{course_id} | GET    | `yes`         | Fetch details of a specific course              |
-| /{course_id} | PUT    | `yes`         | Update course info (Admin)                      |
-| /{course_id} | DELETE | `yes`         | Delete a course (Admin)                         |
+| Endpoint     | Method | Auth Required     | Description                                     |
+| ------------ | ------ | ----------------- | ----------------------------------------------- |
+| /            | GET    | `yes`             | Fetch list of all courses with optional filters |
+| /            | POST   | `yes (admin/mod)` | Create a new course                             |
+| /{course_id} | GET    | `yes`             | Fetch details of a specific course              |
+| /{course_id} | PUT    | `yes (admin/mod)` | Update course info                              |
+| /{course_id} | DELETE | `yes (admin/mod)` | Delete a course                                 |
 
 **Query Parameters for GET /courses/**
 
@@ -53,31 +53,52 @@ Base URL: `<baseurl>/v1/courses/`
 **Response** `200 OK`
 
 ```json
-[
-  {
-    "id": "uuid",
-    "code": "SOEng2022",
-    "name": "Data Structure and Algorithms",
-    "description": "Techniques for organizing and processing data",
-    "status": "compulsory",
-    "credit_points": 5,
-    "lecture_hours": 2,
-    "lab_hours": 4,
-    "tutorial_hours": 1,
-    "homework_hours": 5,
-    "credit_hours": 3,
-    "tags": [
-      "data structures",
-      "arrays",
-      "trees",
-      "stack",
-      "linked list",
-      "queue"
-    ],
-    "created_at": "2025-09-27T10:00:00Z",
-    "updated_at": "2025-09-27T12:10:00Z"
-  }
-]
+{
+  "count": 50,
+  "next": "https://<baseurl>/v1/departments/?page=3",
+  "previous": "https://<baseurl>/v1/departments/?page=1",
+  "results": [
+    {
+      "id": "uuid",
+      "code": "SOEng2022",
+      "name": "Data Structure and Algorithms",
+      "description": "Techniques for organizing and processing data",
+      "status": "compulsory",
+      "credit_points": 5,
+      "lecture_hours": 2,
+      "lab_hours": 4,
+      "tutorial_hours": 1,
+      "homework_hours": 5,
+      "credit_hours": 3,
+      "tags": [
+        "data structures",
+        "arrays",
+        "trees",
+        "stack",
+        "linked list",
+        "queue"
+      ],
+      "created_at": "2025-09-27T10:00:00Z",
+      "updated_at": "2025-09-27T12:10:00Z"
+    },
+    {
+      "id": "uuid",
+      "code": "CS2025",
+      "name": "Operating Systems",
+      "description": "Introduction to operating systems concepts",
+      "status": "compulsory",
+      "credit_points": 4,
+      "lecture_hours": 3,
+      "lab_hours": 2,
+      "tutorial_hours": 1,
+      "homework_hours": 3,
+      "credit_hours": 3,
+      "tags": ["os", "process", "threads", "scheduling"],
+      "created_at": "2025-09-28T08:00:00Z",
+      "updated_at": "2025-09-28T09:00:00Z"
+    }
+  ]
+}
 ```
 
 ---
@@ -88,7 +109,7 @@ Base URL: `<baseurl>/v1/courses/`
 
 #### POST `/courses/`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
 ```json
 {
@@ -187,7 +208,7 @@ Base URL: `<baseurl>/v1/courses/`
 
 #### PUT `/courses/uuid`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
 ```json
 {
@@ -232,15 +253,9 @@ Base URL: `<baseurl>/v1/courses/`
 
 #### DELETE `/courses/uuid`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
-**Response** `200 OK`
-
-```json
-{
-  "message": "Course deleted successfully."
-}
-```
+**Response** `204 No Content`
 
 ---
 
@@ -260,5 +275,5 @@ Base URL: `<baseurl>/v1/courses/`
 ## 5. Notes / References
 
 - Related database table: [courses](../architecture/database-schema.md/#4-courses)
-- Indexes: `code`, `department_id`, `tags`
+- Indexes: `code`, `tags`
 - Filtering courses by `departmentId`, `year`, or `semester` supports the personalized feed and search functionalities.
