@@ -2,8 +2,8 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-09-27  
-**Status:** Draft
+**Date:** 2025-10-01  
+**Status:** Update
 
 ---
 
@@ -21,13 +21,13 @@ Base URL: `<baseurl>/v1/schools/`
 
 ## 2. Endpoint Details
 
-| Endpoint     | Method | Auth Required | Description                        |
-| ------------ | ------ | ------------- | ---------------------------------- |
-| /            | GET    | `yes`         | Fetch list of all schools          |
-| /            | POST   | `yes`         | Create a new school (Admin)        |
-| /{school_id} | GET    | `yes`         | Fetch details of a specific school |
-| /{school_id} | PUT    | `yes`         | Update school info (Admin)         |
-| /{school_id} | DELETE | `yes`         | Delete a school (Admin)            |
+| Endpoint     | Method    | Auth Required | Description                        |
+| ------------ | --------- | ------------- | ---------------------------------- |
+| /            | GET       | `yes`         | Fetch list of all schools          |
+| /            | POST      | `yes (admin)` | Create a new school                |
+| /{school_id} | GET       | `yes`         | Fetch details of a specific school |
+| /{school_id} | PUT/PATCH | `yes (admin)` | Update school info                 |
+| /{school_id} | DELETE    | `yes (admin)` | Delete a school                    |
 
 ---
 
@@ -68,7 +68,7 @@ Base URL: `<baseurl>/v1/schools/`
 
 #### POST `/schools/`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
 ```json
 {
@@ -116,7 +116,7 @@ Base URL: `<baseurl>/v1/schools/`
 
 #### PUT `/schools/uuid`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
 ```json
 {
@@ -143,15 +143,9 @@ Base URL: `<baseurl>/v1/schools/`
 
 #### DELETE `/schools/uuid`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer <admin_access_token>
 
-**Response** `200 OK`
-
-```json
-{
-  "message": "School deleted successfully."
-}
-```
+**Response** `204 No Content`
 
 ---
 
