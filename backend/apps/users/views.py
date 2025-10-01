@@ -4,13 +4,13 @@ from django.shortcuts import get_object_or_404
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
 from rest_framework import generics, permissions, status
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
+from .pagination import UserPagination
 from .serializers import (
     AdminUserSerializer,
     LoginSerializer,
@@ -108,12 +108,6 @@ class AdminUserDetailView(APIView):
         user = self.get_object(user_id)
         user.delete()
         return Response({"message": "User deleted successfully."}, status=status.HTTP_200_OK)
-
-
-class UserPagination(PageNumberPagination):
-    page_size = 20
-    page_size_query_param = "page_size"
-    max_page_size = 100
 
 
 class UserListView(generics.ListAPIView):

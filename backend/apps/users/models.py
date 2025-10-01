@@ -88,3 +88,8 @@ class User(AbstractUser):
 
     def is_oauth_user(self):
         return self.provider is not None and self.provider_id is not None
+
+    class Meta:
+        db_table = "users"
+        verbose_name = "User"
+        verbose_name_plural = "Users"

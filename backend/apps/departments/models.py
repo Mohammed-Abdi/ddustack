@@ -13,6 +13,9 @@ class Department(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = "departments"
+        verbose_name = "Department"
+        verbose_name_plural = "Departments"
         indexes = [
             models.Index(fields=["school_id"]),
             models.Index(fields=["name"]),
