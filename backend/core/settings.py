@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "apps.courses",
     "apps.course_offerings",
     "apps.contents",
+    "apps.notifications",
 ]
 
 # -------------------------------
