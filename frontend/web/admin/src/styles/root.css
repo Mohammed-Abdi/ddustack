@@ -1,6 +1,6 @@
 :root {
   --color-primary: #191918;
-  --color-primary-hover: #161616;
+  --color-primary-hover: #2c2c37;
   --color-primary-muted: #262626;
 
   --color-success: #34a853;
@@ -44,8 +44,8 @@
   --color-error-muted: #3a1b1a;
 
   --color-background: #202124;
-  --color-surface: #2b2b2b;
-  --color-container: #1e1e1e;
+  --color-surface: #242427;
+  --color-container: #18181b;
   --color-border: #5f6368;
   --color-border-hover: #8a8a8a;
 
