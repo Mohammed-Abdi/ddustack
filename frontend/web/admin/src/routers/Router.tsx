@@ -2,6 +2,7 @@ import type React from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
+import AlertDialog from '@/components/ui/AlertDialog';
 import Auth from '@/pages/auth/Auth';
 import Home from '@/pages/home/Home';
 import Landing from '@/pages/landing/Landing';
@@ -14,6 +15,7 @@ const Layout: React.FC = () => (
     <ScrollToHash />
     <Outlet />
     <Toaster position="top-center" richColors />
+    <AlertDialog />
   </>
 );
 
