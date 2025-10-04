@@ -39,7 +39,7 @@ class User(AbstractUser):
     # ---------------------------
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField(unique=True)
 
     # ---------------------------
     # OAuth / Authentication provider
@@ -52,6 +52,7 @@ class User(AbstractUser):
     # ---------------------------
     class Role(models.TextChoices):
         STUDENT = "STUDENT", "student"
+        LECTURER = "LECTURER", "Lecturer"
         ADMIN = "ADMIN", "admin"
         MODERATOR = "MODERATOR", "moderator"
 
@@ -61,6 +62,7 @@ class User(AbstractUser):
     # Status
     # ---------------------------
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
     # ---------------------------
     # Academic info

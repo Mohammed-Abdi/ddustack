@@ -15,9 +15,16 @@ load_dotenv(BASE_DIR / ".env")
 # Security
 # -------------------------------
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default-secret")
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+GITHUB_CLIENT_ID = os.environ.get("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET")
+APPLE_CLIENT_ID = os.environ.get("APPLE_CLIENT_ID")
+APPLE_TEAM_ID = os.environ.get("APPLE_TEAM_ID")
+APPLE_KEY_ID = os.environ.get("APPLE_KEY_ID")
+APPLE_PRIVATE_KEY = os.environ.get("APPLE_PRIVATE_KEY")
 
 # -------------------------------
 # Installed Apps
@@ -56,9 +63,15 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# -------------------------------
+# URL configuration
+# -------------------------------
 ROOT_URLCONF = "core.urls"
 AUTH_USER_MODEL = "users.User"
 
+# -------------------------------
+# Templates
+# -------------------------------
 TEMPLATES: list[Any] = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -137,7 +150,6 @@ SIMPLE_JWT: dict[str, Any] = {
 # -------------------------------
 CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")
 CORS_ALLOW_CREDENTIALS = True
-
 
 # -------------------------------
 # ANSI Color Codes for Logging
