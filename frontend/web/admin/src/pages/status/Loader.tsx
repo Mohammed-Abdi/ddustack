@@ -1,4 +1,4 @@
-import { BlocksShuffle } from '@/assets/animations/BlocksShuffle';
+import { Spinner } from '@/assets/animations/Spinner';
 import type React from 'react';
 
 interface LoaderProps {
@@ -16,7 +16,7 @@ const Loader: React.FC<LoaderProps> = ({ message, full = true }) => {
       }}
     >
       <div className="flex flex-col items-center justify-center gap-5">
-        <BlocksShuffle className="w-10 h-10" />
+        <Spinner className="w-10 h-10" />
         <span aria-live="polite">
           {message ? `${message}…` : 'One moment please…'}
         </span>

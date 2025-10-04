@@ -1,13 +1,16 @@
+import { nanoid } from '@reduxjs/toolkit';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Form from './components/Form';
 
 const links = [
   {
+    id: nanoid(),
     path: '',
     label: 'Terms of Use',
   },
   {
+    id: nanoid(),
     path: '',
     label: 'Privacy Policy',
   },
@@ -20,7 +23,7 @@ const Auth: React.FC = () => {
         <Form />
         <div className="flex items-center gap-1.5 w-fit text-sm mx-auto">
           {links.map((link, i) => (
-            <>
+            <article key={link.id} className="space-x-1.5">
               <Link
                 className="opacity-70 underline hover:opacity-100"
                 to={link.path}
@@ -28,7 +31,7 @@ const Auth: React.FC = () => {
                 {link.label}
               </Link>
               {i % 2 === 0 && <span className="opacity-70">|</span>}
-            </>
+            </article>
           ))}
         </div>
       </section>

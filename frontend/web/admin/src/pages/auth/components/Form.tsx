@@ -4,52 +4,46 @@ import { LogoColored } from '@/assets/icons/Logo';
 import { Password } from '@/assets/icons/Password';
 import Button from '@/components/ui/Button';
 import type { ApiError } from '@/features/api/interfaces';
+import {
+  useLazyCheckEmailQuery,
+  useLoginMutation,
+  useRegisterMutation,
+} from '@/features/auth/authApi';
+import { setCredentials } from '@/features/auth/authSlice';
+import { type AppDispatch } from '@/store/store';
+import { capitalizeFirstLetter } from '@/utils/format';
+import { nanoid } from '@reduxjs/toolkit';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import { toast } from 'sonner';
+import { handleAppleAuth } from '../services/apple';
+import { handleGithubAuth } from '../services/github';
+import { handleGoogleAuth } from '../services/google';
 import EmailBadge from './EmailBadge';
 import Input from './Input';
 import OAuthButton, { type OAuthProvider } from './OAuthButton';
 
 const authMethods = [
   {
+    id: nanoid(),
     provider: 'google',
-    method: async () => {
-      try {
-        //TODO: implement google auth logic
-        alert('Google auth (on dev)');
-      } catch (error: unknown) {
-        const err = error as ApiError;
-        toast.error(err.data?.detail);
-      }
-    },
+    method: handleGoogleAuth,
   },
   {
+    id: nanoid(),
     provider: 'github',
-    method: async () => {
-      try {
-        //TODO: implement google auth logic
-        alert('Github auth (on dev)');
-      } catch (error: unknown) {
-        const err = error as ApiError;
-        toast.error(err.data?.detail);
-      }
-    },
+    method: handleGithubAuth,
   },
   {
+    id: nanoid(),
     provider: 'apple',
-    method: async () => {
-      try {
-        //TODO: implement google auth logic
-        alert('Apple auth (on dev)');
-      } catch (error: unknown) {
-        const err = error as ApiError;
-        toast.error(err.data?.detail);
-      }
-    },
+    method: handleAppleAuth,
   },
 ];
 
 const Form: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [firstName, setFirstName] = React.useState<string>('');
   const [lastName, setLastName] = React.useState<string>('');
   const [confirmPassword, setConfirmPassword] = React.useState<string>('');
@@ -58,8 +52,10 @@ const Form: React.FC = () => {
   const [emailSubmitted, setEmailSubmitted] = React.useState<boolean>(false);
   const [userExists, setUserExists] = React.useState<boolean | null>(null);
 
-  // TODO: Replace with real loading state
-  const isLoading = false;
+  const [checkEmail, { isFetching: isCheckingEmail }] =
+    useLazyCheckEmailQuery();
+  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+  const [register, { isLoading: isRegistering }] = useRegisterMutation();
 
   const isLogin = emailSubmitted && userExists;
   const isSignup = emailSubmitted && !userExists;
@@ -67,6 +63,8 @@ const Form: React.FC = () => {
   const emailRef = React.useRef<HTMLInputElement | null>(null);
   const passwordRef = React.useRef<HTMLInputElement | null>(null);
   const firstNameRef = React.useRef<HTMLInputElement | null>(null);
+
+  const isLoading = isCheckingEmail || isLoggingIn || isRegistering;
 
   React.useEffect(() => {
     if (!emailSubmitted && emailRef.current) emailRef.current.focus();
@@ -82,9 +80,9 @@ const Form: React.FC = () => {
       return;
     }
     try {
-      //TODO: implement email auth logic
+      const data = await checkEmail(email).unwrap();
+      setUserExists(data.exists);
       setEmailSubmitted(true);
-      setUserExists(true);
     } catch (error: unknown) {
       const err = error as ApiError;
       toast.error(err.data?.detail);
@@ -94,8 +92,11 @@ const Form: React.FC = () => {
   const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      //TODO: implement email login logic
-      alert('Email login (on dev)');
+      const credentials = { email: email.toLowerCase(), password };
+      const data = await login(credentials).unwrap();
+      dispatch(
+        setCredentials({ accessToken: data.access_token, user: data.user })
+      );
     } catch (error: unknown) {
       const err = error as ApiError;
       toast.error(err.data?.detail);
@@ -110,8 +111,16 @@ const Form: React.FC = () => {
     }
 
     try {
-      //TODO: implement email signup logic
-      alert('Email signup (on dev)');
+      const userData = {
+        email: email.toLowerCase(),
+        password,
+        first_name: capitalizeFirstLetter(firstName),
+        last_name: capitalizeFirstLetter(lastName),
+      };
+      const data = await register(userData).unwrap();
+      dispatch(
+        setCredentials({ accessToken: data.access_token, user: data.user })
+      );
     } catch (error: unknown) {
       const err = error as ApiError;
       toast.error(err.data?.detail);
@@ -156,6 +165,7 @@ const Form: React.FC = () => {
         <>
           {authMethods.map((auth) => (
             <OAuthButton
+              key={auth.id}
               provider={auth.provider as OAuthProvider}
               onClick={auth.method}
               disabled={isLoading}
