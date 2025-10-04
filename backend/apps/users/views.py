@@ -25,10 +25,7 @@ OAUTH_PROVIDERS = ("google", "github", "apple")
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
-    return {
-        "access_token": str(refresh.access_token),
-        "refresh_token": str(refresh),
-    }
+    return {"access_token": str(refresh.access_token), "refresh_token": str(refresh)}
 
 
 class RegisterView(generics.CreateAPIView):
@@ -68,8 +65,7 @@ class RefreshTokenView(APIView):
             return Response({"detail": "Refresh token missing."}, status=status.HTTP_401_UNAUTHORIZED)
         try:
             refresh = RefreshToken(refresh_token)
-            access_token = str(refresh.access_token)
-            return Response({"access_token": access_token}, status=status.HTTP_200_OK)
+            return Response({"access_token": str(refresh.access_token)}, status=status.HTTP_200_OK)
         except TokenError:
             return Response({"detail": "Invalid or expired refresh token."}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -78,8 +74,7 @@ class MeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(UserSerializer(request.user).data, status=status.HTTP_200_OK)
 
     def put(self, request):
         serializer = UserSerializer(request.user, data=request.data, partial=True)
@@ -95,20 +90,16 @@ class AdminUserDetailView(APIView):
         return get_object_or_404(User, id=user_id)
 
     def get(self, request, user_id):
-        user = self.get_object(user_id)
-        serializer = AdminUserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(AdminUserSerializer(self.get_object(user_id)).data, status=status.HTTP_200_OK)
 
     def put(self, request, user_id):
-        user = self.get_object(user_id)
-        serializer = AdminUserSerializer(user, data=request.data, partial=True)
+        serializer = AdminUserSerializer(self.get_object(user_id), data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, user_id):
-        user = self.get_object(user_id)
-        user.delete()
+        self.get_object(user_id).delete()
         return Response({"message": "User deleted successfully."}, status=status.HTTP_200_OK)
 
 
@@ -127,16 +118,25 @@ class OAuthLoginView(APIView):
             return Response({"detail": "Unsupported provider."}, status=status.HTTP_400_BAD_REQUEST)
 
         if provider == "google":
-            token = request.data.get("id_token")
-            if not token:
-                return Response({"detail": "id_token is required"}, status=status.HTTP_400_BAD_REQUEST)
+            code = request.data.get("code")
+            if not code:
+                return Response({"detail": "code is required"}, status=status.HTTP_400_BAD_REQUEST)
+            data = {
+                "code": code,
+                "client_id": settings.GOOGLE_CLIENT_ID,
+                "client_secret": settings.GOOGLE_CLIENT_SECRET,
+                "redirect_uri": settings.GOOGLE_REDIRECT_URI,
+                "grant_type": "authorization_code",
+            }
+            token_resp = requests.post("https://oauth2.googleapis.com/token", data=data)
+            token_json = token_resp.json()
             try:
-                id_info = google_id_token.verify_oauth2_token(token, google_requests.Request(), settings.GOOGLE_CLIENT_ID)
+                id_info = google_id_token.verify_oauth2_token(token_json["id_token"], google_requests.Request(), settings.GOOGLE_CLIENT_ID)
                 email = id_info.get("email")
                 provider_id = id_info.get("sub")
                 first_name = id_info.get("given_name", "")
                 last_name = id_info.get("family_name", "")
-            except ValueError:
+            except Exception:
                 return Response({"detail": "Invalid Google token."}, status=status.HTTP_400_BAD_REQUEST)
 
         elif provider == "github":
@@ -152,7 +152,9 @@ class OAuthLoginView(APIView):
                     "code": code,
                 },
             )
-            access_token = token_resp.json().get("access_token")
+            token_json = token_resp.json()
+            print(token_json)
+            access_token = token_json.get("access_token")
             if not access_token:
                 return Response({"detail": "Failed to fetch GitHub access token"}, status=status.HTTP_400_BAD_REQUEST)
             user_resp = requests.get("https://api.github.com/user", headers={"Authorization": f"token {access_token}"})
@@ -163,27 +165,25 @@ class OAuthLoginView(APIView):
             last_name = ""
 
         elif provider == "apple":
-            token = request.data.get("id_token")
-            if not token:
-                return Response({"detail": "id_token is required"}, status=status.HTTP_400_BAD_REQUEST)
+            code = request.data.get("code")
+            if not code:
+                return Response({"detail": "code is required"}, status=status.HTTP_400_BAD_REQUEST)
+            data = {"client_id": settings.APPLE_CLIENT_ID, "client_secret": settings.APPLE_CLIENT_SECRET, "code": code, "grant_type": "authorization_code"}
+            token_resp = requests.post("https://appleid.apple.com/auth/token", data=data)
+            token_json = token_resp.json()
+            print(token_json)
             try:
-                id_info = jwt.decode(token, options={"verify_signature": False})
+                id_info = jwt.decode(token_json["id_token"], options={"verify_signature": False})
                 email = id_info.get("email")
                 provider_id = id_info.get("sub")
                 first_name = ""
                 last_name = ""
-            except jwt.PyJWTError:
+            except Exception:
                 return Response({"detail": "Invalid Apple token."}, status=status.HTTP_400_BAD_REQUEST)
 
         user, created = User.objects.get_or_create(
             email=email,
-            defaults={
-                "first_name": first_name,
-                "last_name": last_name,
-                "provider": provider,
-                "provider_id": provider_id,
-                "is_active": True,
-            },
+            defaults={"first_name": first_name, "last_name": last_name, "provider": provider, "provider_id": provider_id, "is_active": True},
         )
         if not created and (user.provider != provider or user.provider_id != provider_id):
             user.provider = provider
