@@ -6,6 +6,7 @@ import AlertDialog from '@/components/ui/AlertDialog';
 import Auth from '@/pages/auth/Auth';
 import Home from '@/pages/home/Home';
 import Landing from '@/pages/landing/Landing';
+import NotFound from '@/pages/status/NotFound';
 import type { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import ScrollToHash from './ScrollToHash';
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'auth',
         element: <Auth />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },
