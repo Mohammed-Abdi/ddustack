@@ -16,13 +16,14 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "role",
             "is_active",
+            "is_staff",
             "department_id",
             "year",
             "semester",
             "date_joined",
             "updated_at",
         ]
-        read_only_fields = ["id", "role", "is_active", "date_joined", "updated_at"]
+        read_only_fields = ["id", "role", "is_active", "is_staff", "date_joined", "updated_at"]
 
 
 class RegisterSerializer(serializers.ModelSerializer):
