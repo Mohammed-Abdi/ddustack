@@ -15,7 +15,7 @@
   --color-background: #ffffff;
   --color-surface: #fcfbfb;
   --color-container: #f6f5f4;
-  --color-border: #e5e5e5;
+  --color-border: #d1d5db;
   --color-border-hover: #d1d1d1;
 
   --color-text-primary: #191918;
@@ -46,8 +46,8 @@
   --color-background: #202124;
   --color-surface: #242427;
   --color-container: #18181b;
-  --color-border: #5f6368;
-  --color-border-hover: #8a8a8a;
+  --color-container-border: #d1d5db;
+  --color-container-border-hover: #8a8a8a;
 
   --color-text-primary: #e8eaed;
   --color-text-secondary: #bdc1c6;
