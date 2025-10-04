@@ -10,7 +10,11 @@ export const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['app.alertDialog.action.method'],
+      },
+    }).concat(apiSlice.middleware),
   devTools: import.meta.env.VITE_DEV === 'true',
 });
 

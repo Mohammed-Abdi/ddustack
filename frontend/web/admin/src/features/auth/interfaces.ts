@@ -16,3 +16,8 @@ export interface User {
   date_joined?: string;
   updated_at?: string;
 }
+
+export interface LoginResponse {
+  access_token: string;
+  user: User;
+}
