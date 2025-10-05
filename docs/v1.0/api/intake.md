@@ -3,7 +3,7 @@
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
 **Date:** 2025-10-05  
-**Status:** Draft
+**Status:** Update
 
 ---
 
@@ -210,6 +210,6 @@ Base URL: `<baseurl>/v1/intakes/`
 
 ## 5. Notes / References
 
-- Related database table: [intake](../architecture/database-schema.md/#intake)
+- Related database table: [intake](../architecture/database-schema.md/#9-intake)
 - Indexes: `type`, `status`
 - Filtering and search support helps admins, moderators, and lecturers quickly locate requests based on type, status, or user identifiers.
