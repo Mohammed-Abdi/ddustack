@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "apps.contents",
     "apps.notifications",
     "apps.saved_courses",
+    "apps.intake",
 ]
 
 # -------------------------------

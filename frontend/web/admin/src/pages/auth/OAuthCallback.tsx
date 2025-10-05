@@ -39,7 +39,7 @@ const OAuthCallback: React.FC = () => {
         dispatch(
           setCredentials({ accessToken: res.access_token, user: res.user })
         );
-        navigate('/');
+        setTimeout(() => navigate('/'), 200);
       })
       .catch((err) => {
         if (loginTimerRef.current) clearTimeout(loginTimerRef.current);
