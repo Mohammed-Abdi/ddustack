@@ -4,6 +4,22 @@ This document describes the database schema for DduStack, including tables, colu
 
 ---
 
+# Table of Contents
+
+1. [Users](#1-users)
+2. [Schools](#2-schools)
+3. [Departments](#3-departments)
+4. [Courses](#4-courses)
+5. [Course Offerings](#5-course-offerings)
+6. [Contents](#6-contents)
+7. [Notifications](#7-notifications)
+8. [Saved Courses](#8-saved-courses)
+9. [Intake](#9-intake)
+10. [Relationships](#10-relationships)
+11. [Notes](#11-notes)
+
+---
+
 ## 1. Users
 
 **Table Name:** `users`
@@ -16,8 +32,9 @@ This document describes the database schema for DduStack, including tables, colu
 | email         | VARCHAR(255) | User's email, unique                            | `yes`    |
 | provider      | VARCHAR(255) | Authentication provider                         | `no`     |
 | provider_id   | VARCHAR(255) | Provider-specific user ID for Google/other auth | `no`     |
-| role          | ENUM         | `student`, `moderator`, `admin`                 | `yes`    |
+| role          | ENUM         | `STUDENT`, `LECTURER`, `MODERATOR`, `ADMIN`     | `yes`    |
 | is_active     | BOOLEAN      | Whether the user account is active              | `yes`    |
+| is_staff      | BOOLEAN      | Whether the user have staff privileges          | `yes`    |
 | department_id | UUID         | References `departments.id`, can be null        | `no`     |
 | year          | INTEGER      | Academic year                                   | `no`     |
 | semester      | INTEGER      | Academic semester                               | `no`     |
@@ -79,7 +96,7 @@ This document describes the database schema for DduStack, including tables, colu
 | code           | VARCHAR(10)  | Course code, unique                              | `yes`    |
 | name           | VARCHAR(255) | Course name                                      | `yes`    |
 | description    | TEXT         | Course description                               | `no`     |
-| status         | ENUM         | `compulsory`, `supportive`, `common`, `elective` | `yes`    |
+| status         | ENUM         | `COMPULSORY`, `SUPPORTIVE`, `COMMON`, `ELECTIVE` | `yes`    |
 | credit_points  | INTEGER      | Credit points                                    | `no`     |
 | lecture_hours  | INTEGER      | Number of lecture hours                          | `no`     |
 | lab_hours      | INTEGER      | Number of lab hours                              | `no`     |
@@ -129,10 +146,10 @@ This document describes the database schema for DduStack, including tables, colu
 | id         | UUID         | Primary key                                                 | `yes`    |
 | course_id  | UUID         | References `courses.id`                                     | `yes`    |
 | title      | VARCHAR(255) | Content title                                               | `yes`    |
-| type       | ENUM         | `lecture`, `assignment`, `lab`, `tutorial`                  | `yes`    |
+| type       | ENUM         | `LECTURE`, `ASSIGNMENT`, `LAB`, `TUTORIAL`                  | `yes`    |
 | path       | VARCHAR(255) | File path/location                                          | `yes`    |
 | chapter    | VARCHAR(255) | Chapter name                                                | `no`     |
-| file       | JSONB        | Contains `{ "extension": "pdf", "size": 10, "unit": "MB" }` | `yes`    |
+| file       | JSONB        | Contains `{ "extension": "PDF", "size": 10, "unit": "MB" }` | `yes`    |
 | tags       | TEXT[]       | Tags for filtering/search                                   | `no`     |
 | created_at | TIMESTAMP    | Creation time                                               | `yes`    |
 | updated_at | TIMESTAMP    | Last update                                                 | `yes`    |
@@ -155,7 +172,7 @@ This document describes the database schema for DduStack, including tables, colu
 | user_id    | UUID         | References `users.id`                      | `yes`    |
 | title      | VARCHAR(255) | Notification title                         | `yes`    |
 | message    | TEXT         | Notification content                       | `yes`    |
-| type       | ENUM         | `info`, `alert`, `reminder`                | `yes`    |
+| type       | ENUM         | `INFO`, `ALERT`, `REMINDER`                | `yes`    |
 | is_read    | BOOLEAN      | Whether the user has read the notification | `yes`    |
 | created_at | TIMESTAMP    | Creation time                              | `yes`    |
 | updated_at | TIMESTAMP    | Last update                                | `yes`    |
@@ -187,7 +204,33 @@ This document describes the database schema for DduStack, including tables, colu
 
 ---
 
-## 9. Relationships
+## 9. Intake
+
+**Table Name:** `intake`
+
+| Field         | Type         | Description                                                                                                           | Required |
+| ------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| id            | UUID         | Primary key                                                                                                           | `yes`    |
+| user_id       | UUID         | References `users.id`                                                                                                 | `yes`    |
+| type          | ENUM         | `ACCESS`, `ROLE_CHANGE`, `DATA_UPDATE`, `COURSE_ASSIGNMENT`, `COMPLAIN`, `FEEDBACK`, `LEAVE`, `GRADE_REVIEW`, `OTHER` | `yes`    |
+| status        | ENUM         | `PENDING`, `REJECTED`, `APPROVED`                                                                                     | `yes`    |
+| full_name     | VARCHAR(150) | Full name of staff/student                                                                                            | `no`     |
+| phone_number  | VARCHAR(20)  | Phone number                                                                                                          | `no`     |
+| staff_id      | VARCHAR(50)  | Staff ID                                                                                                              | `no`     |
+| student_id    | VARCHAR(50)  | Student ID                                                                                                            | `no`     |
+| department_id | VARCHAR(50)  | Department ID                                                                                                         | `no`     |
+| description   | TEXT         | Additional notes or explanation                                                                                       | `no`     |
+| created_at    | TIMESTAMP    | Creation time                                                                                                         | `yes`    |
+| updated_at    | TIMESTAMP    | Last update                                                                                                           | `yes`    |
+
+**Indexes:**
+
+- `type`
+- `status`
+
+---
+
+## 10. Relationships
 
 - `departments.school_id` → `schools.id`
 - `courses.department_id` → `departments.id`
@@ -198,14 +241,16 @@ This document describes the database schema for DduStack, including tables, colu
 - `notifications.user_id` → `users.id`
 - `saved_courses.user_id` → `users.id`
 - `saved_courses.course_id` → `courses.id`
+- `intake.user_id` → `users.id`
 
 ---
 
-## 10. Notes
+## 11. Notes
 
 - All primary keys are **UUIDs** for scalability.
 - Foreign keys enforce data integrity between tables.
 - Indexed columns like `tags`, `code`, and `(user_id, course_id)` improve search and filtering performance.
-- Optional fields are nullable to support flexibility in course metadata.
+- Optional fields are nullable to support flexibility.
 - Notifications track user events and actions.
 - Saved courses allow users to bookmark courses for quick access.
+- Intake track submissions from users, including their type, status, and relevant details.
