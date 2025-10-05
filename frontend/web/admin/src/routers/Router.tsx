@@ -7,6 +7,7 @@ import Auth from '@/pages/auth/Auth';
 import OAuthCallback from '@/pages/auth/OAuthCallback';
 import Home from '@/pages/home/Home';
 import Landing from '@/pages/landing/Landing';
+import Forbidden from '@/pages/status/Forbidden';
 import NotFound from '@/pages/status/NotFound';
 import type { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
@@ -25,12 +26,18 @@ const Layout: React.FC = () => (
 
 const Root: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  return user ? (
+  const allowedRoles = ['admin', 'moderator', 'lecturer'];
+
+  if (!user) return <Landing />;
+
+  const isAuthorized = allowedRoles.includes(user.role.toLowerCase());
+
+  if (!isAuthorized) return <Forbidden />;
+
+  return (
     <ProtectedRoute>
       <Home />
     </ProtectedRoute>
-  ) : (
-    <Landing />
   );
 };
 

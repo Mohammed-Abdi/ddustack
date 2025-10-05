@@ -11,4 +11,5 @@ urlpatterns = [
     path("v1/", include("apps.contents.urls")),
     path("v1/", include("apps.notifications.urls")),
     path("v1/", include("apps.saved_courses.urls")),
+    path("v1/", include("apps.intake.urls")),
 ]
