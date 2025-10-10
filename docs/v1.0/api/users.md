@@ -55,9 +55,7 @@ Base URL: `<baseurl>/v1/`
   "first_name": "Mohammed",
   "last_name": "Abdi",
   "email": "mohammed@example.com",
-  "password": "securePass123",
-  "year": 3,
-  "semester": 2
+  "password": "securePass123"
 }
 ```
 
