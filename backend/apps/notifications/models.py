@@ -11,7 +11,7 @@ class Notification(models.Model):
         REMINDER = "REMINDER", "Reminder"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
     title = models.CharField(max_length=255)
     message = models.TextField()
     type = models.CharField(max_length=20, choices=NotificationType.choices)
@@ -24,10 +24,13 @@ class Notification(models.Model):
         verbose_name = "Notification"
         verbose_name_plural = "Notifications"
         indexes = [
-            models.Index(fields=["user_id"]),
+            models.Index(fields=["user"]),
             models.Index(fields=["is_read"]),
             models.Index(fields=["type"]),
         ]
 
     def __str__(self):
-        return f"{self.title} - {self.user_id}"
+        return f"{self.title} - {self.user}"
+
+    def __repr__(self):
+        return f"<Notification user={self.user.email} title={self.title}>"

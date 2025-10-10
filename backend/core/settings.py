@@ -23,34 +23,37 @@ GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI")
 GITHUB_CLIENT_ID = os.environ.get("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET")
-APPLE_CLIENT_ID = os.environ.get("APPLE_CLIENT_ID")
-APPLE_TEAM_ID = os.environ.get("APPLE_TEAM_ID")
-APPLE_KEY_ID = os.environ.get("APPLE_KEY_ID")
-APPLE_PRIVATE_KEY = os.environ.get("APPLE_PRIVATE_KEY")
 
 # -------------------------------
 # Installed Apps
 # -------------------------------
 INSTALLED_APPS = [
+    # Django core
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third-party apps
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
+    "cloudinary",
+    "cloudinary_storage",
+    # Local apps
     "apps.users",
     "apps.schools",
     "apps.departments",
     "apps.courses",
     "apps.course_offerings",
+    "apps.course_assignments",
     "apps.contents",
     "apps.notifications",
     "apps.saved_courses",
     "apps.intake",
 ]
+
 
 # -------------------------------
 # Middleware
@@ -105,6 +108,17 @@ DATABASES: dict[str, Any] = {
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }
+
+# -------------------------------
+# Cloud Storage (Cloudinary)
+# -------------------------------
+CLOUDINARY_STORAGE: dict[str, Any] = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_KEY_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # -------------------------------
 # Password Validators

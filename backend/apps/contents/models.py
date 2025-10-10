@@ -1,7 +1,9 @@
 import uuid
+from typing import Any
 
 from apps.courses.models import Course
 from django.db import models
+from utils.normalization import normalize_capitalization
 
 
 class Content(models.Model):
@@ -12,7 +14,7 @@ class Content(models.Model):
         TUTORIAL = "TUTORIAL", "Tutorial"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    course_id = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="contents")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="contents")
     title = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=ContentType.choices)
     path = models.CharField(max_length=255)
@@ -22,12 +24,25 @@ class Content(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        if self.title:
+            self.title = normalize_capitalization(self.title)
+        if self.chapter:
+            self.chapter = normalize_capitalization(self.chapter)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.title} ({self.type})"
+
+    def __repr__(self):
+        return f"<Content {self.id} | {self.title} | {self.type}>"
+
     class Meta:
         db_table = "contents"
         verbose_name = "Content"
         verbose_name_plural = "Contents"
         indexes = [
-            models.Index(fields=["course_id"]),
+            models.Index(fields=["course"]),
             models.Index(fields=["type"]),
             models.Index(fields=["tags"]),
         ]

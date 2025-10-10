@@ -13,7 +13,7 @@ class CourseOfferingViewSet(viewsets.ModelViewSet):
     serializer_class = CourseOfferingSerializer
     permission_classes = [IsAuthenticated, IsAdminOrModeratorOrReadOnly]
     filter_backends = [filters.SearchFilter]
-    search_fields = []
+    search_fields = ["id"]
     pagination_class = CourseOfferingPagination
 
     def get_queryset(self):

@@ -5,7 +5,8 @@ from .models import SavedCourse
 
 
 class SavedCourseSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = SavedCourse
-        fields = ["id", "user_id", "course_id", "saved_at"]
-        read_only_fields = ["id", "user_id", "saved_at"]
+        fields = ["id", "user", "course", "saved_at"]
+        read_only_fields = ["id", "saved_at"]
