@@ -2,38 +2,40 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-10-01  
-**Status:** Update
+**Date:** 2025-10-11  
+**Status:** Updated
 
 ---
 
 ## 1. Overview
 
-The Departments API manages academic departments within schools. It supports CRUD operations for admins and read-only access for students. Typical use cases include:
+The Departments API manages academic departments within schools. It supports CRUD operations for admins and moderators, while students have read-only access.
 
-- Admins creating, updating, and deleting departments.
-- Students fetching departments by school for content navigation.
-- Organizing courses and contents by department.
+Use cases include:
 
-Base URL: `<baseurl>/v1/departments/`
+- Admins creating, updating, or deleting departments.
+- Students fetching departments by school for navigation.
+- Structuring courses and content by department.
+
+Bse URL: `<baseurl>/v1/departments/`
 
 ---
 
 ## 2. Endpoint Details
 
-| Endpoint         | Method | Auth Required     | Description                            |
-| ---------------- | ------ | ----------------- | -------------------------------------- |
-| /                | GET    | `yes`             | Fetch list of all departments          |
-| /                | POST   | `yes (admin/mod)` | Create a new department                |
-| /{department_id} | GET    | `yes`             | Fetch details of a specific department |
-| /{department_id} | PUT    | `yes (admin/mod)` | Update department info                 |
-| /{department_id} | DELETE | `yes (admin/mod)` | Delete a department                    |
+| Endpoint             | Method | Auth Required     | Description                            |
+| -------------------- | ------ | ----------------- | -------------------------------------- |
+| /                    | GET    | `yes`             | Fetch list of all departments          |
+| /                    | POST   | `yes (admin/mod)` | Create a new department                |
+| /uuid:department_id/ | GET    | `yes`             | Fetch details of a specific department |
+| /uuid:department_id/ | PUT    | `yes (admin/mod)` | Update department info                 |
+| /uuid:department_id/ | DELETE | `yes (admin/mod)` | Delete a department                    |
 
-**Query Parameters for GET /contents/**
+**Query Parameters for GET /departments/**
 
 | Parameter | Type   | Description                  | Required |
 | --------- | ------ | ---------------------------- | -------- |
-| schoolId  | UUID   | Filter departments by school | `no`     |
+| school_id | UUID   | Filter departments by school | `no`     |
 | search    | STRING | Search departments by name   | `no`     |
 
 ---
@@ -55,18 +57,20 @@ Base URL: `<baseurl>/v1/departments/`
   {
     "id": "uuid",
     "name": "Software Engineering",
-    "school_id": "uuid",
-    "year": 4,
-    "created_at": "2025-09-27T10:00:00Z",
-    "updated_at": "2025-09-27T10:05:00Z"
+    "code": "SE",
+    "school": "uuid",
+    "year": 5,
+    "created_at": "2025-10-11T10:00:00Z",
+    "updated_at": "2025-10-11T10:05:00Z"
   },
   {
     "id": "uuid",
     "name": "Computer Science",
-    "school_id": "uuid",
+    "code": "CS",
+    "school": "uuid",
     "year": 4,
-    "created_at": "2025-09-27T10:10:00Z",
-    "updated_at": "2025-09-27T10:15:00Z"
+    "created_at": "2025-10-11T10:10:00Z",
+    "updated_at": "2025-10-11T10:15:00Z"
   }
 ]
 ```
@@ -88,10 +92,11 @@ Base URL: `<baseurl>/v1/departments/`
   {
     "id": "uuid",
     "name": "Software Engineering",
-    "school_id": "uuid",
-    "year": 4,
-    "created_at": "2025-09-27T10:00:00Z",
-    "updated_at": "2025-09-27T10:05:00Z"
+    "code": "SE",
+    "school": "uuid",
+    "year": 5,
+    "created_at": "2025-10-11T10:00:00Z",
+    "updated_at": "2025-10-11T10:05:00Z"
   }
 ]
 ```
@@ -109,8 +114,9 @@ Base URL: `<baseurl>/v1/departments/`
 ```json
 {
   "name": "Electrical Engineering",
-  "school_id": "uuid",
-  "year": 4
+  "code": "EE",
+  "school": "uuid",
+  "year": 5
 }
 ```
 
@@ -120,10 +126,11 @@ Base URL: `<baseurl>/v1/departments/`
 {
   "id": "uuid",
   "name": "Electrical Engineering",
-  "school_id": "uuid",
-  "year": 4,
-  "created_at": "2025-09-27T12:00:00Z",
-  "updated_at": "2025-09-27T12:00:00Z"
+  "code": "EE",
+  "school": "uuid",
+  "year": 5,
+  "created_at": "2025-10-11T12:00:00Z",
+  "updated_at": "2025-10-11T12:00:00Z"
 }
 ```
 
@@ -133,7 +140,7 @@ Base URL: `<baseurl>/v1/departments/`
 
 **Request**
 
-#### GET `/departments/uuid`
+#### GET `/departments/uuid:department_id/`
 
 > Authorization: Bearer <access_token>
 
@@ -143,10 +150,11 @@ Base URL: `<baseurl>/v1/departments/`
 {
   "id": "uuid",
   "name": "Software Engineering",
-  "school_id": "uuid",
-  "year": 4,
-  "created_at": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T10:05:00Z"
+  "code": "SE",
+  "school": "uuid",
+  "year": 5,
+  "created_at": "2025-10-11T10:00:00Z",
+  "updated_at": "2025-10-11T10:05:00Z"
 }
 ```
 
@@ -156,14 +164,15 @@ Base URL: `<baseurl>/v1/departments/`
 
 **Request**
 
-#### PUT `/departments/uuid`
+#### PUT `/departments/uuid:department_id/`
 
 > Authorization: Bearer <admin_access_token>
 
 ```json
 {
-  "name": "Advanced Software Engineering",
-  "year": 4
+  "name": "Software Engineering",
+  "code": "SE",
+  "year": 5
 }
 ```
 
@@ -172,11 +181,12 @@ Base URL: `<baseurl>/v1/departments/`
 ```json
 {
   "id": "uuid",
-  "name": "Advanced Software Engineering",
-  "school_id": "uuid",
+  "name": "Software Engineering",
+  "code": "SE",
+  "school": "uuid",
   "year": 4,
-  "created_at": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T12:10:00Z"
+  "created_at": "2025-10-11T10:00:00Z",
+  "updated_at": "2025-10-11T12:10:00Z"
 }
 ```
 
@@ -186,7 +196,7 @@ Base URL: `<baseurl>/v1/departments/`
 
 **Request**
 
-#### DELETE `/departments/uuid`
+#### DELETE `/departments/uuid:department_id/`
 
 > Authorization: Bearer <admin_access_token>
 
@@ -210,5 +220,5 @@ Base URL: `<baseurl>/v1/departments/`
 ## 5. Notes / References
 
 - Related database table: [departments](../architecture/database-schema.md/#3-departments)
-- Indexes: `school_id`, `name`
+- Indexes: `school`, `name`
 - Departments are often filtered by `school_id` to support hierarchical navigation.

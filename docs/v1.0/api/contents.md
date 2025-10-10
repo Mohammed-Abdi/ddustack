@@ -2,14 +2,14 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-10-01  
+**Date:** 2025-10-11  
 **Status:** Updated
 
 ---
 
 ## 1. Overview
 
-The Contents API manages course materials such as LECTUREs, assignments, labs, and tutorials. It allows:
+The Contents API manages course materials such as lectures, assignments, labs, and tutorials. It allows:
 
 - Students to fetch content for specific courses.
 - Admins to create, update, and delete content.
@@ -21,19 +21,19 @@ Base URL: `<baseurl>/v1/contents/`
 
 ## 2. Endpoint Details
 
-| Endpoint      | Method | Auth Required     | Description                             |
-| ------------- | ------ | ----------------- | --------------------------------------- |
-| /             | GET    | `yes`             | Fetch all contents, optionally filtered |
-| /             | POST   | `yes (admin/mod)` | Create new content                      |
-| /{content_id} | GET    | `yes`             | Fetch specific content                  |
-| /{content_id} | PUT    | `yes (admin/mod)` | Update content                          |
-| /{content_id} | DELETE | `yes (admin/mod)` | Delete content                          |
+| Endpoint          | Method | Auth Required     | Description                             |
+| ----------------- | ------ | ----------------- | --------------------------------------- |
+| /                 | GET    | `yes`             | Fetch all contents, optionally filtered |
+| /                 | POST   | `yes (admin/mod)` | Create new content                      |
+| /uuid:content_id/ | GET    | `yes`             | Fetch specific content                  |
+| /uuid:content_id/ | PUT    | `yes (admin/mod)` | Update content                          |
+| /uuid:content_id/ | DELETE | `yes (admin/mod)` | Delete content                          |
 
 **Query Parameters for GET /contents/**
 
 | Parameter | Type   | Description                             | Required |
 | --------- | ------ | --------------------------------------- | -------- |
-| courseId  | UUID   | Filter contents by course_id            | `no`     |
+| course_id | UUID   | Filter contents by course_id            | `no`     |
 | search    | STRING | Filter content by content title or tags | `no`     |
 
 ---
@@ -44,7 +44,7 @@ Base URL: `<baseurl>/v1/contents/`
 
 **Request**
 
-#### GET `/contents/?courseId=uuid`
+#### GET `/contents/?course_id=uuid`
 
 > Authorization: Bearer <access_token>
 
@@ -58,27 +58,27 @@ Base URL: `<baseurl>/v1/contents/`
   "results": [
     {
       "id": "uuid",
-      "course_id": "uuid",
+      "course": "uuid",
       "title": "Introduction to Algorithms",
       "type": "LECTURE",
-      "path": "https://drive.google.com/uc?export=download&id=<file_id>",
+      "path": "https://my-bucket.s3.amazonaws.com/contents/<file_id>.pptx",
       "chapter": "1",
       "file": { "extension": "PPTX", "size": 123, "unit": "KB" },
       "tags": ["algorithms", "basics"],
-      "created_at": "2025-09-27T10:00:00Z",
-      "updated_at": "2025-09-27T10:05:00Z"
+      "created_at": "2025-10-11T00:00:00Z",
+      "updated_at": "2025-10-11T00:00:00Z"
     },
     {
       "id": "uuid",
-      "course_id": "uuid",
+      "course": "uuid",
       "title": "Data Structures",
       "type": "LECTURE",
-      "path": "https://drive.google.com/uc?export=download&id=<file_id>",
+      "path": "https://my-bucket.s3.amazonaws.com/contents/<file_id>.pdf",
       "chapter": "2",
       "file": { "extension": "PDF", "size": 1.2, "unit": "MB" },
       "tags": ["data structures", "arrays", "trees"],
-      "created_at": "2025-09-28T09:00:00Z",
-      "updated_at": "2025-09-28T09:05:00Z"
+      "created_at": "2025-10-11T00:00:00Z",
+      "updated_at": "2025-10-11T00:00:00Z"
     }
   ]
 }
@@ -96,13 +96,13 @@ Base URL: `<baseurl>/v1/contents/`
 
 ```json
 {
-  "course_id": "uuid",
-  "title": "Advanced Database Systems",
+  "course": "uuid",
+  "title": "Stack and Queue",
   "type": "LECTURE",
-  "path": "https://drive.google.com/uc?export=download&id=<file_id>",
+  "path": "https://my-bucket.s3.amazonaws.com/contents/<file_id>.pdf",
   "chapter": "1",
   "file": { "extension": "PDF", "size": 1, "unit": "MB" },
-  "tags": ["database", "advanced"]
+  "tags": ["fifo", "lifo", "non-primitive data types"]
 }
 ```
 
@@ -111,15 +111,15 @@ Base URL: `<baseurl>/v1/contents/`
 ```json
 {
   "id": "uuid",
-  "course_id": "uuid",
-  "title": "Advanced Database Systems",
+  "course": "uuid",
+  "title": "Stack and Queue",
   "type": "LECTURE",
-  "path": "https://drive.google.com/uc?export=download&id=<file_id>",
+  "path": "https://my-bucket.s3.amazonaws.com/contents/<file_id>.pdf",
   "chapter": "1",
   "file": { "extension": "PDF", "size": 1, "unit": "MB" },
-  "tags": ["database", "advanced"],
-  "created_at": "2025-09-27T12:00:00Z",
-  "updated_at": "2025-09-27T12:00:00Z"
+  "tags": ["fifo", "lifo", "non-primitive data types"],
+  "created_at": "2025-10-11T00:00:00Z",
+  "updated_at": "2025-10-11T00:00:00Z"
 }
 ```
 
@@ -129,7 +129,7 @@ Base URL: `<baseurl>/v1/contents/`
 
 **Request**
 
-#### GET `/contents/uuid`
+#### GET `/uuid:content_id/`
 
 > Authorization: Bearer <access_token>
 
@@ -138,15 +138,15 @@ Base URL: `<baseurl>/v1/contents/`
 ```json
 {
   "id": "uuid",
-  "course_id": "uuid",
+  "course": "uuid",
   "title": "Introduction to Algorithms",
   "type": "LECTURE",
-  "path": "https://drive.google.com/uc?export=download&id=<file_id>",
+  "path": "https://my-bucket.s3.amazonaws.com/contents/<file_id>.pdf",
   "chapter": "1",
   "file": { "extension": "PDF", "size": 2, "unit": "MB" },
   "tags": ["algorithms", "basics"],
-  "created_at": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T10:05:00Z"
+  "created_at": "2025-10-11T00:00:00Z",
+  "updated_at": "2025-10-11T00:00:00Z"
 }
 ```
 
@@ -156,7 +156,7 @@ Base URL: `<baseurl>/v1/contents/`
 
 **Request**
 
-#### PUT `/contents/uuid`
+#### PUT `/uuid:content_id/`
 
 > Authorization: Bearer <admin_access_token>
 
@@ -173,15 +173,15 @@ Base URL: `<baseurl>/v1/contents/`
 ```json
 {
   "id": "uuid",
-  "course_id": "uuid",
+  "course": "uuid",
   "title": "Intro to Algorithms",
   "type": "LECTURE",
-  "path": "https://drive.google.com/uc?export=download&id=<file_id>",
+  "path": "https://my-bucket.s3.amazonaws.com/contents/<file_id>.pdf",
   "chapter": "2",
   "file": { "extension": "PDF", "size": 2, "unit": "MB" },
   "tags": ["algorithms", "fundamentals"],
-  "created_at": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T12:10:00Z"
+  "created_at": "2025-10-11T00:00:00Z",
+  "updated_at": "2025-10-11T00:00:00Z"
 }
 ```
 
@@ -191,7 +191,7 @@ Base URL: `<baseurl>/v1/contents/`
 
 **Request**
 
-#### DELETE `/contents/uuid`
+#### DELETE `/uuid:content_id/`
 
 > Authorization: Bearer <admin_access_token>
 
@@ -215,5 +215,5 @@ Base URL: `<baseurl>/v1/contents/`
 ## 5. Notes / References
 
 - Related database table: [contents](../architecture/database-schema.md/#6-contents)
-- Indexes: `course_id`, `tags`, `type`
-- Filtering by `courseId` supports personalized feeds and content search.
+- Indexes: `course`, `tags`, `type`
+- Filtering by `course_id` supports personalized feeds and content search.

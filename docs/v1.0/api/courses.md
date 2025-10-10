@@ -2,18 +2,20 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-10-01  
-**Status:** Update
+**Date:** 2025-10-11  
+**Status:** Updated
 
 ---
 
 ## 1. Overview
 
-The Courses API manages all academic courses. It supports CRUD operations for admins and read-only access for students. Typical use cases include:
+The Courses API manages all academic courses. It supports CRUD operations for admins and moderators, while students have read-only access.
+
+Use cases include:
 
 - Admins creating, updating, and deleting courses.
-- Students fetching courses for browsing or personalized feed.
-- Filtering courses by department, year, or semester.
+- Students browsing, filtering, or searching courses by department, year, or semester.
+- Providing course data for personalized feeds and learning paths.
 
 Base URL: `<baseurl>/v1/courses/`
 
@@ -21,22 +23,22 @@ Base URL: `<baseurl>/v1/courses/`
 
 ## 2. Endpoint Details
 
-| Endpoint     | Method | Auth Required     | Description                                     |
-| ------------ | ------ | ----------------- | ----------------------------------------------- |
-| /            | GET    | `yes`             | Fetch list of all courses with optional filters |
-| /            | POST   | `yes (admin/mod)` | Create a new course                             |
-| /{course_id} | GET    | `yes`             | Fetch details of a specific course              |
-| /{course_id} | PUT    | `yes (admin/mod)` | Update course info                              |
-| /{course_id} | DELETE | `yes (admin/mod)` | Delete a course                                 |
+| Endpoint         | Method | Auth Required     | Description                                     |
+| ---------------- | ------ | ----------------- | ----------------------------------------------- |
+| /                | GET    | `yes`             | Fetch list of all courses with optional filters |
+| /                | POST   | `yes (admin/mod)` | Create a new course                             |
+| /uuid:course_id/ | GET    | `yes`             | Fetch details of a specific course              |
+| /uuid:course_id/ | PUT    | `yes (admin/mod)` | Update course info                              |
+| /uuid:course_id/ | DELETE | `yes (admin/mod)` | Delete a course                                 |
 
 **Query Parameters for GET /courses/**
 
-| Parameter    | Type   | Description                            | Required |
-| ------------ | ------ | -------------------------------------- | -------- |
-| departmentId | UUID   | Filter courses by department           | `no`     |
-| year         | INT    | Filter courses by year of offering     | `no`     |
-| semester     | INT    | Filter courses by semester of offering | `no`     |
-| search       | STRING | Filter courses by course code or tags  | `no`     |
+| Parameter     | Type   | Description                            | Required |
+| ------------- | ------ | -------------------------------------- | -------- |
+| department_id | UUID   | Filter courses by department           | `no`     |
+| year          | INT    | Filter courses by year of offering     | `no`     |
+| semester      | INT    | Filter courses by semester of offering | `no`     |
+| search        | STRING | Filter by code, abbreviation, or tags  | `no`     |
 
 ---
 
@@ -46,7 +48,7 @@ Base URL: `<baseurl>/v1/courses/`
 
 **Request**
 
-#### GET `/courses/?departmentId=uuid&year=3&semester=1`
+#### GET `/courses/?department_id=uuid&year=3&semester=1`
 
 > Authorization: Bearer <access_token>
 
@@ -54,48 +56,43 @@ Base URL: `<baseurl>/v1/courses/`
 
 ```json
 {
-  "count": 50,
-  "next": "https://<baseurl>/v1/departments/?page=3",
-  "previous": "https://<baseurl>/v1/departments/?page=1",
+  "count": 2,
+  "next": null,
+  "previous": null,
   "results": [
     {
       "id": "uuid",
       "code": "SOEng2022",
-      "name": "Data Structure and Algorithms",
-      "description": "Techniques for organizing and processing data",
-      "status": "compulsory",
+      "name": "Data Structures and Algorithms",
+      "abbreviation": "DSA",
+      "description": "Techniques for organizing and processing data.",
+      "status": "COMPULSORY",
       "credit_points": 5,
       "lecture_hours": 2,
-      "lab_hours": 4,
+      "lab_hours": 2,
       "tutorial_hours": 1,
       "homework_hours": 5,
       "credit_hours": 3,
-      "tags": [
-        "data structures",
-        "arrays",
-        "trees",
-        "stack",
-        "linked list",
-        "queue"
-      ],
-      "created_at": "2025-09-27T10:00:00Z",
-      "updated_at": "2025-09-27T12:10:00Z"
+      "tags": ["data", "trees", "stacks", "algorithms"],
+      "created_at": "2025-10-11T09:00:00Z",
+      "updated_at": "2025-10-11T09:05:00Z"
     },
     {
       "id": "uuid",
-      "code": "CS2025",
+      "code": "SOEng2032",
       "name": "Operating Systems",
-      "description": "Introduction to operating systems concepts",
-      "status": "compulsory",
-      "credit_points": 4,
-      "lecture_hours": 3,
-      "lab_hours": 2,
+      "abbreviation": "OS",
+      "description": "Introduction to processes, threads, and scheduling.",
+      "status": "COMPULSORY",
+      "credit_points": 5,
+      "lecture_hours": 2,
+      "lab_hours": 3,
       "tutorial_hours": 1,
-      "homework_hours": 3,
+      "homework_hours": 5,
       "credit_hours": 3,
-      "tags": ["os", "process", "threads", "scheduling"],
-      "created_at": "2025-09-28T08:00:00Z",
-      "updated_at": "2025-09-28T09:00:00Z"
+      "tags": ["os", "threads", "process", "scheduling"],
+      "created_at": "2025-10-11T09:10:00Z",
+      "updated_at": "2025-10-11T09:15:00Z"
     }
   ]
 }
@@ -113,24 +110,18 @@ Base URL: `<baseurl>/v1/courses/`
 
 ```json
 {
-  "code": "SOEng2022",
-  "name": "Data Structure and Algorithms",
-  "description": "Techniques for organizing and processing data",
-  "status": "compulsory",
+  "code": "SOEng2042",
+  "name": "Fundamentals of Database Systems",
+  "abbreviation": "FDB",
+  "description": "Introduction to database design, SQL, and data modeling.",
+  "status": "COMPULSORY",
   "credit_points": 5,
   "lecture_hours": 2,
-  "lab_hours": 4,
-  "tutorial_hours": 1,
+  "lab_hours": 3,
+  "tutorial_hours": 0,
   "homework_hours": 5,
   "credit_hours": 3,
-  "tags": [
-    "data structures",
-    "arrays",
-    "trees",
-    "stack",
-    "linked list",
-    "queue"
-  ]
+  "tags": ["database", "SQL", "normalization", "ERD"]
 }
 ```
 
@@ -139,26 +130,20 @@ Base URL: `<baseurl>/v1/courses/`
 ```json
 {
   "id": "uuid",
-  "code": "SOEng2022",
-  "name": "Data Structure and Algorithms",
-  "description": "Techniques for organizing and processing data",
-  "status": "compulsory",
+  "code": "SOEng2042",
+  "name": "Fundamentals of Database Systems",
+  "abbreviation": "FDB",
+  "description": "Introduction to database design, SQL, and data modeling.",
+  "status": "COMPULSORY",
   "credit_points": 5,
   "lecture_hours": 2,
-  "lab_hours": 4,
-  "tutorial_hours": 1,
+  "lab_hours": 3,
+  "tutorial_hours": 0,
   "homework_hours": 5,
   "credit_hours": 3,
-  "tags": [
-    "data structures",
-    "arrays",
-    "trees",
-    "stack",
-    "linked list",
-    "queue"
-  ],
-  "created_at": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T12:10:00Z"
+  "tags": ["database", "SQL", "normalization", "ERD"],
+  "created_at": "2025-10-11T10:00:00Z",
+  "updated_at": "2025-10-11T10:00:00Z"
 }
 ```
 
@@ -168,7 +153,7 @@ Base URL: `<baseurl>/v1/courses/`
 
 **Request**
 
-#### GET `/courses/uuid`
+#### GET `/courses/uuid:course_id/`
 
 > Authorization: Bearer <access_token>
 
@@ -178,25 +163,19 @@ Base URL: `<baseurl>/v1/courses/`
 {
   "id": "uuid",
   "code": "SOEng2022",
-  "name": "Data Structure and Algorithms",
-  "description": "Techniques for organizing and processing data",
-  "status": "compulsory",
+  "name": "Data Structures and Algorithms",
+  "abbreviation": "DSA",
+  "description": "Techniques for organizing and processing data.",
+  "status": "COMPULSORY",
   "credit_points": 5,
   "lecture_hours": 2,
-  "lab_hours": 4,
+  "lab_hours": 2,
   "tutorial_hours": 1,
   "homework_hours": 5,
   "credit_hours": 3,
-  "tags": [
-    "data structures",
-    "arrays",
-    "trees",
-    "stack",
-    "linked list",
-    "queue"
-  ],
-  "created_at": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T12:10:00Z"
+  "tags": ["data", "trees", "stacks", "algorithms"],
+  "created_at": "2025-10-11T09:00:00Z",
+  "updated_at": "2025-10-11T09:05:00Z"
 }
 ```
 
@@ -206,14 +185,15 @@ Base URL: `<baseurl>/v1/courses/`
 
 **Request**
 
-#### PUT `/courses/uuid`
+#### PUT `/courses/uuid:course_id/`
 
 > Authorization: Bearer <admin_access_token>
 
 ```json
 {
-  "name": "Data Structure and Algorithms",
-  "description": "Techniques for organizing and processing data"
+  "name": "Digital Logic Design",
+  "description": "Covers combinational and sequential logic, circuit design, and digital systems.",
+  "tags": ["logic", "digital", "circuits", "design"]
 }
 ```
 
@@ -222,26 +202,20 @@ Base URL: `<baseurl>/v1/courses/`
 ```json
 {
   "id": "uuid",
-  "code": "SOEng2022",
-  "name": "Data Structure and Algorithms",
-  "description": "Techniques for organizing and processing data",
-  "status": "compulsory",
+  "code": "ECEG2142",
+  "name": "Digital Logic Design",
+  "abbreviation": "DLD",
+  "description": "Covers combinational and sequential logic, circuit design, and digital systems.",
+  "status": "COMPULSORY",
   "credit_points": 5,
   "lecture_hours": 2,
-  "lab_hours": 4,
-  "tutorial_hours": 1,
+  "lab_hours": 3,
+  "tutorial_hours": 0,
   "homework_hours": 5,
   "credit_hours": 3,
-  "tags": [
-    "data structures",
-    "arrays",
-    "trees",
-    "stack",
-    "linked list",
-    "queue"
-  ],
-  "created_at": "2025-09-27T10:00:00Z",
-  "updated_at": "2025-09-27T12:10:00Z"
+  "tags": ["logic", "digital", "circuits", "design"],
+  "created_at": "2025-10-11T09:00:00Z",
+  "updated_at": "2025-10-11T12:00:00Z"
 }
 ```
 
@@ -251,7 +225,7 @@ Base URL: `<baseurl>/v1/courses/`
 
 **Request**
 
-#### DELETE `/courses/uuid`
+#### DELETE `/courses/uuid:course_id/`
 
 > Authorization: Bearer <admin_access_token>
 
@@ -275,5 +249,5 @@ Base URL: `<baseurl>/v1/courses/`
 ## 5. Notes / References
 
 - Related database table: [courses](../architecture/database-schema.md/#4-courses)
-- Indexes: `code`, `tags`
-- Filtering courses by `departmentId`, `year`, or `semester` supports the personalized feed and search functionalities.
+- Indexes: `code`, `abbreviation`, `tags`
+- Courses can be filtered by `department_id`, `year`, or `semester` for academic structuring and personalized recommendations.

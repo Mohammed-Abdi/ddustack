@@ -2,7 +2,7 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-10-01  
+**Date:** 2025-10-10  
 **Status:** Updated
 
 ---
@@ -21,11 +21,11 @@ Base URL: `<baseurl>/v1/saved-courses/`
 
 ## 2. Endpoint Details
 
-| Endpoint | Method | Auth Required | Description                     |
-| -------- | ------ | ------------- | ------------------------------- |
-| /        | GET    | `yes`         | List all saved courses for user |
-| /        | POST   | `yes`         | Save a course                   |
-| /{id}    | DELETE | `yes`         | Remove a saved course           |
+| Endpoint  | Method | Auth Required | Description                                       |
+| --------- | ------ | ------------- | ------------------------------------------------- |
+| /         | GET    | `yes`         | List all saved courses for the authenticated user |
+| /         | POST   | `yes`         | Save a course                                     |
+| /uuid:id/ | DELETE | `yes`         | Remove a saved course                             |
 
 ---
 
@@ -37,7 +37,7 @@ Base URL: `<baseurl>/v1/saved-courses/`
 
 #### GET `/saved-courses/`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer `<access_token>`
 
 **Response** `200 OK`
 
@@ -49,13 +49,15 @@ Base URL: `<baseurl>/v1/saved-courses/`
   "results": [
     {
       "id": "uuid",
-      "course_id": "uuid",
-      "saved_at": "2025-09-27T12:00:00Z"
+      "user": "uuid",
+      "course": "uuid",
+      "saved_at": "2025-10-10T12:00:00Z"
     },
     {
       "id": "uuid",
-      "course_id": "uuid",
-      "saved_at": "2025-09-27T12:05:00Z"
+      "user": "uuid",
+      "course": "uuid",
+      "saved_at": "2025-10-10T12:05:00Z"
     }
   ]
 }
@@ -69,11 +71,11 @@ Base URL: `<baseurl>/v1/saved-courses/`
 
 #### POST `/saved-courses/`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer `<access_token>`
 
 ```json
 {
-  "course_id": "uuid"
+  "course": "uuid"
 }
 ```
 
@@ -82,9 +84,9 @@ Base URL: `<baseurl>/v1/saved-courses/`
 ```json
 {
   "id": "uuid",
-  "user_id": "uuid",
-  "course_id": "uuid",
-  "saved_at": "2025-09-27T12:15:00Z"
+  "user": "uuid",
+  "course": "uuid",
+  "saved_at": "2025-10-10T12:15:00Z"
 }
 ```
 
@@ -94,9 +96,9 @@ Base URL: `<baseurl>/v1/saved-courses/`
 
 **Request**
 
-#### DELETE `/saved-courses/uuid`
+#### DELETE `/saved-courses/uuid:id/`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer `<access_token>`
 
 **Response** `204 No Content`
 
@@ -117,5 +119,6 @@ Base URL: `<baseurl>/v1/saved-courses/`
 
 ## 5. Notes / References
 
-- Prevents duplicate saves using the unique `(user_id, course_id)` constraint.
+- Prevents duplicate saves using the unique `(user, course)` constraint.
 - Related database table: [saved_courses](../architecture/database-schema.md/#8-saved-courses)
+- Pagination is applied by default, 10 items per page, max 50 per page.

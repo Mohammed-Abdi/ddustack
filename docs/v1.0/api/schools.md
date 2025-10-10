@@ -2,7 +2,7 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-10-01  
+**Date:** 2025-10-10  
 **Status:** Update
 
 ---
@@ -21,13 +21,13 @@ Base URL: `<baseurl>/v1/schools/`
 
 ## 2. Endpoint Details
 
-| Endpoint     | Method    | Auth Required | Description                        |
-| ------------ | --------- | ------------- | ---------------------------------- |
-| /            | GET       | `yes`         | Fetch list of all schools          |
-| /            | POST      | `yes (admin)` | Create a new school                |
-| /{school_id} | GET       | `yes`         | Fetch details of a specific school |
-| /{school_id} | PUT/PATCH | `yes (admin)` | Update school info                 |
-| /{school_id} | DELETE    | `yes (admin)` | Delete a school                    |
+| Endpoint         | Method    | Auth Required | Description                        |
+| ---------------- | --------- | ------------- | ---------------------------------- |
+| /                | GET       | `yes`         | Fetch list of all schools          |
+| /                | POST      | `yes (admin)` | Create a new school                |
+| /uuid:school_id/ | GET       | `yes`         | Fetch details of a specific school |
+| /uuid:school_id/ | PUT/PATCH | `yes (admin)` | Update school info                 |
+| /uuid:school_id/ | DELETE    | `yes (admin)` | Delete a school                    |
 
 ---
 
@@ -39,7 +39,7 @@ Base URL: `<baseurl>/v1/schools/`
 
 #### GET `/schools/`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer `<access_token>`
 
 **Response** `200 OK`
 
@@ -68,7 +68,7 @@ Base URL: `<baseurl>/v1/schools/`
 
 #### POST `/schools/`
 
-> Authorization: Bearer <admin_access_token>
+> Authorization: Bearer `<admin_access_token>`
 
 ```json
 {
@@ -93,9 +93,9 @@ Base URL: `<baseurl>/v1/schools/`
 
 **Request**
 
-#### GET `/schools/uuid`
+#### GET `/schools/uuid:school_id/`
 
-> Authorization: Bearer <access_token>
+> Authorization: Bearer `<access_token>`
 
 **Response** `200 OK`
 
@@ -114,9 +114,9 @@ Base URL: `<baseurl>/v1/schools/`
 
 **Request**
 
-#### PUT `/schools/uuid`
+#### PUT `/schools/uuid:school_id/`
 
-> Authorization: Bearer <admin_access_token>
+> Authorization: Bearer `<admin_access_token>`
 
 ```json
 {
@@ -141,9 +141,9 @@ Base URL: `<baseurl>/v1/schools/`
 
 **Request**
 
-#### DELETE `/schools/uuid`
+#### DELETE `/schools/uuid:school_id/`
 
-> Authorization: Bearer <admin_access_token>
+> Authorization: Bearer `<admin_access_token>`
 
 **Response** `204 No Content`
 

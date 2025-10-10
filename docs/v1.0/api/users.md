@@ -199,8 +199,8 @@ Authorization: Bearer `<access_token>`
   "department": "uuid",
   "year": 3,
   "semester": 1,
-  "user_id": "STU123",
-  "is_verified": false,
+  "user_id": "DDU*******",
+  "is_verified": true,
   "date_joined": "2025-10-01T10:00:00Z",
   "updated_at": "2025-10-01T10:05:00Z"
 }
@@ -237,7 +237,7 @@ Authorization: Bearer `<access_token>`
   "department": "uuid",
   "year": 3,
   "semester": 2,
-  "user_id": "STU123",
+  "user_id": "DDU*******",
   "is_verified": false,
   "date_joined": "2025-10-01T10:00:00Z",
   "updated_at": "2025-10-10T15:00:00Z"
@@ -293,7 +293,7 @@ Authorization: Bearer `<admin_access_token>`
       "department": "uuid",
       "year": 3,
       "semester": 1,
-      "user_id": "STU234",
+      "user_id": "DDU*******",
       "is_verified": true,
       "date_joined": "2025-09-29T14:31:11.296366Z",
       "updated_at": "2025-09-29T14:31:11.296393Z"
@@ -331,7 +331,7 @@ Authorization: Bearer `<admin_access_token>`
   "department": "uuid",
   "year": 4,
   "semester": 2,
-  "user_id": "STAFF567",
+  "user_id": "DDU*******",
   "is_verified": true,
   "date_joined": "2025-09-27T10:00:00Z",
   "updated_at": "2025-10-10T12:00:00Z"
@@ -358,14 +358,6 @@ Authorization: Bearer `<admin_access_token>`
 | 404       | Not Found             | Resource not found                               |
 | 500       | Internal Server Error | Unexpected server error                          |
 | 503       | Service Unavailable   | Server temporarily unavailable                   |
-
-**Example:**
-
-```json
-{
-  "email": ["user with this email already exists."]
-}
-```
 
 ---
 
