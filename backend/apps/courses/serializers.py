@@ -11,6 +11,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "id",
             "code",
             "name",
+            "abbreviation",
             "description",
             "status",
             "credit_points",

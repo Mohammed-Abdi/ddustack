@@ -6,6 +6,7 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    user_id = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -15,15 +16,29 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "role",
-            "is_active",
-            "is_staff",
-            "department_id",
+            "department",
             "year",
             "semester",
+            "user_id",
+            "is_verified",
             "date_joined",
             "updated_at",
         ]
-        read_only_fields = ["id", "role", "is_active", "is_staff", "date_joined", "updated_at"]
+        read_only_fields = [
+            "id",
+            "role",
+            "date_joined",
+            "updated_at",
+            "user_id",
+            "is_verified",
+        ]
+
+    def get_user_id(self, obj: User):
+        if obj.role == User.Role.STUDENT:
+            return obj.student_id
+        if obj.role in [User.Role.LECTURER, User.Role.MODERATOR, User.Role.ADMIN]:
+            return obj.staff_id
+        return None
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -31,7 +46,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email", "password", "department_id", "year", "semester"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "password",
+            "year",
+            "semester",
+        ]
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -56,6 +78,7 @@ class LoginSerializer(serializers.Serializer):
 
 
 class AdminUserSerializer(serializers.ModelSerializer):
+    user_id = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -68,10 +91,25 @@ class AdminUserSerializer(serializers.ModelSerializer):
             "provider_id",
             "role",
             "is_active",
-            "department_id",
+            "is_staff",
+            "department",
             "year",
             "semester",
+            "user_id",
+            "is_verified",
             "date_joined",
             "updated_at",
         ]
-        read_only_fields = ["id", "date_joined", "updated_at"]
+        read_only_fields = [
+            "id",
+            "date_joined",
+            "updated_at",
+            "user_id",
+        ]
+
+    def get_user_id(self, obj: User):
+        if obj.role == User.Role.STUDENT:
+            return obj.student_id
+        if obj.role in [User.Role.LECTURER, User.Role.MODERATOR, User.Role.ADMIN]:
+            return obj.staff_id
+        return None

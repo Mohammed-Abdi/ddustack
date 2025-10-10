@@ -1,8 +1,10 @@
 import uuid
 from typing import Any
 
+from apps.departments.models import Department
 from apps.users.models import User
 from django.db import models
+from utils.normalization import normalize_capitalization
 
 
 class Intake(models.Model):
@@ -23,7 +25,7 @@ class Intake(models.Model):
         APPROVED = "APPROVED", "Approved"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="intakes")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="intakes")
     type = models.CharField(max_length=30, choices=Type.choices, default=Type.ACCESS)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,9 +35,19 @@ class Intake(models.Model):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     staff_id = models.CharField(max_length=50, null=True, blank=True)
     student_id = models.CharField(max_length=50, null=True, blank=True)
-    department_id = models.CharField(max_length=50, null=True, blank=True)
-
+    department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.SET_NULL, related_name="intakes")
     description = models.TextField(null=True, blank=True)
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        if self.full_name:
+            self.full_name = normalize_capitalization(self.full_name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.full_name} - {self.type} ({self.status})"
+
+    def __repr__(self):
+        return f"<Intake {self.full_name} | {self.type} | {self.status}>"
 
     class Meta:
         db_table = "intake"
@@ -52,6 +64,3 @@ class Intake(models.Model):
             models.Index(fields=["type"]),
             models.Index(fields=["status"]),
         ]
-
-    def __str__(self):
-        return f"{self.full_name} - {self.type} ({self.status})"
