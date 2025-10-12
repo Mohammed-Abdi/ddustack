@@ -2,7 +2,7 @@ import type React from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
-import AlertDialog from '@/components/ui/AlertDialog';
+import { AlertDialog } from '@/components/ui';
 import { NotFound, Notifications, Settings } from '@/features/app';
 import { Auth, OAuthCallback, UserInstance, Users } from '@/features/auth';
 import { ContentInstance, Contents } from '@/features/content';
@@ -28,6 +28,7 @@ import type { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import AuthRoute from './AuthRoute';
 import ProtectedRoute from './ProtectedRoute';
+import RoleProtectedRoute from './RoleProtectedRoute';
 import ScrollToHash from './ScrollToHash';
 
 const Layout: React.FC = () => (
@@ -81,33 +82,142 @@ const router = createBrowserRouter([
           { path: 'for-you', element: <ForYou /> },
           { path: 'summarizer', element: <Summarizer /> },
           { path: 'gpa-analyzer', element: <GpaAnalyzer /> },
-          { path: 'users', element: <Users /> },
-          { path: 'users/:userId', element: <UserInstance /> },
-          { path: 'intake', element: <Intake /> },
-          { path: 'intake/:intakeId', element: <IntakeInstance /> },
-          { path: 'schools', element: <Schools /> },
-          { path: 'schools/:schoolId', element: <SchoolInstance /> },
-          { path: 'departments', element: <Departments /> },
+          {
+            path: 'users',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <Users />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: 'users/:userId',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <UserInstance />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: 'intake',
+            element: (
+              <RoleProtectedRoute
+                allowedRoles={['ADMIN', 'LECTURER', 'MODERATOR']}
+              >
+                <Intake />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: 'intake/:intakeId',
+            element: (
+              <RoleProtectedRoute
+                allowedRoles={['ADMIN', 'LECTURER', 'MODERATOR']}
+              >
+                <IntakeInstance />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: 'schools',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <Schools />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: 'schools/:schoolId',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <SchoolInstance />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: 'departments',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <Departments />
+              </RoleProtectedRoute>
+            ),
+          },
           {
             path: 'departments/:departmentId',
-            element: <DepartmentInstance />,
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <DepartmentInstance />
+              </RoleProtectedRoute>
+            ),
           },
-          { path: 'courses', element: <Courses /> },
+          {
+            path: 'courses',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <Courses />
+              </RoleProtectedRoute>
+            ),
+          },
           { path: 'courses/:courseId', element: <CourseInstance /> },
-          { path: 'course-offerings', element: <CourseOfferings /> },
+          {
+            path: 'course-offerings',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <CourseOfferings />
+              </RoleProtectedRoute>
+            ),
+          },
           {
             path: 'course-offerings/:courseOfferingId',
-            element: <CourseOfferingsInstance />,
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <CourseOfferingsInstance />
+              </RoleProtectedRoute>
+            ),
           },
-          { path: 'course-assignments', element: <CourseAssignments /> },
+          {
+            path: 'course-assignments',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <CourseAssignments />
+              </RoleProtectedRoute>
+            ),
+          },
           {
             path: 'course-assignments/:courseAssignmentId',
-            element: <CourseAssignmentsInstance />,
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <CourseAssignmentsInstance />
+              </RoleProtectedRoute>
+            ),
           },
-          { path: 'saved-courses', element: <SavedCourses /> },
-          { path: 'contents', element: <Contents /> },
+          {
+            path: 'saved-courses',
+            element: (
+              <RoleProtectedRoute
+                allowedRoles={['STUDENT', 'MODERATOR', 'ADMIN']}
+              >
+                <SavedCourses />
+              </RoleProtectedRoute>
+            ),
+          },
+          {
+            path: 'contents',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <Contents />
+              </RoleProtectedRoute>
+            ),
+          },
           { path: 'contents/:contentId', element: <ContentInstance /> },
-          { path: 'upgrade-role', element: <UpgradeRole /> },
+          {
+            path: 'upgrade-role',
+            element: (
+              <RoleProtectedRoute allowedRoles={['STUDENT']}>
+                <UpgradeRole />
+              </RoleProtectedRoute>
+            ),
+          },
           { path: 'notifications', element: <Notifications /> },
 
           { path: 'settings', element: <Settings /> },

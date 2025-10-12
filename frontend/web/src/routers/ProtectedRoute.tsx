@@ -1,3 +1,4 @@
+import { Loader } from '@/features/app';
 import type { RootState } from '@/store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -13,8 +14,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     (state: RootState) => state.auth
   );
 
-  if (!user && !accessToken && !isInitializing)
-    return <Navigate to="/auth" replace />;
+  if (isInitializing) return <Loader />;
+
+  if (!user && !accessToken) return <Navigate to="/auth" replace />;
   return <>{children}</>;
 };
 

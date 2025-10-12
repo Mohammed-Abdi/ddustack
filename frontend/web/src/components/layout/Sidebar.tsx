@@ -1,30 +1,31 @@
 import { ChevronLeft } from 'lucide-react';
-import type React from 'react';
-import { useEffect, useRef } from 'react';
+import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { LogoColored } from '@/assets/icons/Logo';
 import SidebarIcon from '@/assets/icons/SidebarIcon';
-import Button from '@/components/ui/Button';
-import NavLink from '@/components/ui/NavLink';
 import {
+  Button,
+  NavLink,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { navLinks } from '@/data/navLinks';
-import { closeSidebar, toggleSidebar } from '@/features/app/slices/appSlice';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+} from '@/components/ui';
+import { navLinks } from '@/data';
+import { closeSidebar, toggleSidebar } from '@/features/app';
+import type { Role } from '@/features/auth';
+import { useMediaQuery } from '@/hooks';
 import type { AppDispatch, RootState } from '@/store/store';
 
-const Sidebar: React.FC = () => {
+export const Sidebar: React.FC = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
   const isMobile = useMediaQuery('mobile');
   const dispatch = useDispatch<AppDispatch>();
   const sidebar = useSelector((state: RootState) => state.app.sidebar);
-  const navRef = useRef<HTMLElement | null>(null);
-  const userMenuRef = useRef<HTMLDivElement | null>(null);
+  const navRef = React.useRef<HTMLElement | null>(null);
+  const userMenuRef = React.useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isMobile) return;
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -103,16 +104,12 @@ const Sidebar: React.FC = () => {
       </div>
 
       <ul className="flex flex-col">
-        {navLinks.map((nav) => (
-          <NavLink key={nav.id} nav={nav} />
-        ))}
+        {navLinks
+          .filter((nav) => nav.roles.includes(user?.role as Role))
+          .map((nav) => (
+            <NavLink key={nav.id} nav={nav} />
+          ))}
       </ul>
-
-      <div ref={userMenuRef} className="mt-auto">
-        {/* <UserMenu onLogout={onLogout} /> */}
-      </div>
     </nav>
   );
 };
-
-export default Sidebar;

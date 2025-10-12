@@ -113,3 +113,12 @@ class AdminUserSerializer(serializers.ModelSerializer):
         if obj.role in [User.Role.LECTURER, User.Role.MODERATOR, User.Role.ADMIN]:
             return obj.staff_id
         return None
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    user_id = serializers.UUIDField()
+
+    def validate_user_id(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError("User not found.")
+        return value

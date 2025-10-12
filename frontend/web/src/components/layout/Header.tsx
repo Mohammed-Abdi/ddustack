@@ -6,7 +6,7 @@ interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({
+export const Header: React.FC<HeaderProps> = ({
   children,
   className = '',
   ...props
@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header
       className={cn(
-        'flex p-2.5 items-center justify-between sticky top-0 w-full border-b border-[var(--color-border)] bg-[var(--color-bg)] z-20',
+        'flex p-2.5 items-center justify-between sticky top-0 w-full border-b border-[var(--color-border)] bg-[var(--color-background)] z-20',
         className
       )}
       {...props}
@@ -23,5 +23,3 @@ const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
-
-export default Header;

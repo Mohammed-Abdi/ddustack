@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token as google_id_token
 from rest_framework import generics, permissions, status
+from rest_framework import filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -19,6 +20,7 @@ from .serializers import (
     LoginSerializer,
     RegisterSerializer,
     UserSerializer,
+    ResetPasswordSerializer,
 )
 
 OAUTH_PROVIDERS = ("google", "github")
@@ -137,7 +139,8 @@ class UserListView(generics.ListAPIView):
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAdminUser]
     pagination_class = UserPagination
-
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['first_name', 'last_name', 'email', 'student_id', 'staff_id']
 
 class OAuthLoginView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -223,3 +226,22 @@ class LogoutView(APIView):
         response = Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
         response.delete_cookie("refresh_token")
         return response
+    
+class ResetPasswordView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request):
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user_id = serializer.validated_data["user_id"]
+
+        user = User.objects.get(id=user_id)
+        default_password = settings.RESET_PASSWORD_DEFAULT
+
+        user.set_password(default_password)
+        user.save(update_fields=["password"])
+
+        return Response(
+            {"detail": f"Password for {user.email} has been reset."},
+            status=status.HTTP_200_OK
+        )

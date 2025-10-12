@@ -2,7 +2,7 @@ import { QuillPen, ScienceSpark, Spark } from '@/assets/icons/Ai';
 import { Folder } from '@/assets/icons/Folder';
 import { Message } from '@/assets/icons/Message';
 import { Repo } from '@/assets/icons/Repo';
-import { Rocket } from '@/assets/icons/Roket';
+import { Rocket } from '@/assets/icons/Rocket';
 import { People } from '@/assets/icons/User';
 import { nanoid } from '@reduxjs/toolkit';
 import { Bookmark, Building, Layers } from 'lucide-react';
@@ -16,7 +16,7 @@ export const navLinks: Nav[] = [
     icon: <Spark className="w-5 h-5" />,
     tag: null,
     hotKey: 'Ctrl + F',
-    roles: ['ADMIN', 'MODERATOR', 'LECTURER'],
+    roles: ['ADMIN', 'MODERATOR', 'LECTURER', 'STUDENT'],
   },
   {
     id: nanoid(),
@@ -25,7 +25,7 @@ export const navLinks: Nav[] = [
     icon: <QuillPen className="w-5 h-5" />,
     tag: { label: 'NEW', explanation: 'Quickly summarize documents' },
     hotKey: 'Ctrl + Q',
-    roles: ['ADMIN', 'MODERATOR', 'LECTURER'],
+    roles: ['ADMIN', 'MODERATOR', 'LECTURER', 'STUDENT'],
   },
   {
     id: nanoid(),
@@ -34,7 +34,7 @@ export const navLinks: Nav[] = [
     icon: <ScienceSpark className="w-5 h-5" />,
     tag: null,
     hotKey: 'Ctrl + G',
-    roles: ['ADMIN', 'MODERATOR', 'LECTURER'],
+    roles: ['ADMIN', 'MODERATOR', 'LECTURER', 'STUDENT'],
   },
   {
     id: nanoid(),
@@ -61,7 +61,7 @@ export const navLinks: Nav[] = [
     icon: <Building className="w-5 h-5" />,
     tag: null,
     hotKey: 'Ctrl + S',
-    roles: ['ADMIN', 'MODERATOR'],
+    roles: ['ADMIN'],
   },
   {
     id: nanoid(),
@@ -70,7 +70,7 @@ export const navLinks: Nav[] = [
     icon: <Layers className="w-5 h-5" />,
     tag: null,
     hotKey: 'Ctrl + D',
-    roles: ['ADMIN', 'MODERATOR'],
+    roles: ['ADMIN'],
   },
   {
     id: nanoid(),
@@ -79,7 +79,7 @@ export const navLinks: Nav[] = [
     icon: <Repo className="w-5 h-5" />,
     tag: null,
     hotKey: 'Ctrl + L',
-    roles: ['ADMIN', 'MODERATOR'],
+    roles: ['ADMIN'],
   },
   {
     id: nanoid(),
@@ -88,7 +88,7 @@ export const navLinks: Nav[] = [
     icon: <Folder className="w-5.5 h-5.5" />,
     tag: null,
     hotKey: 'Ctrl + O',
-    roles: ['ADMIN', 'MODERATOR'],
+    roles: ['ADMIN'],
   },
   {
     id: nanoid(),
@@ -97,7 +97,7 @@ export const navLinks: Nav[] = [
     icon: <Bookmark className="w-5.5 h-5.5" />,
     tag: null,
     hotKey: null,
-    roles: ['ADMIN', 'MODERATOR'],
+    roles: ['ADMIN', 'MODERATOR', 'STUDENT'],
   },
   {
     id: nanoid(),
@@ -106,6 +106,6 @@ export const navLinks: Nav[] = [
     icon: <Rocket className="w-5.5 h-5.5" />,
     tag: null,
     hotKey: null,
-    roles: ['ADMIN', 'MODERATOR'],
+    roles: ['STUDENT'],
   },
 ];

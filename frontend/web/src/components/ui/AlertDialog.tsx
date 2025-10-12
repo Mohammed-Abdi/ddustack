@@ -1,12 +1,12 @@
-import { closeAlertDialog } from '@/features/app/slices/appSlice';
+import { Button } from '@/components/ui';
+import { closeAlertDialog } from '@/features/app';
 import type { AppDispatch, RootState } from '@/store/store';
 import { motion } from 'framer-motion';
 import type React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from './Button';
 
-const AlertDialog: React.FC = () => {
+export const AlertDialog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const alertDialog = useSelector((state: RootState) => state.app.alertDialog);
 
@@ -87,5 +87,3 @@ const AlertDialog: React.FC = () => {
     </motion.main>
   );
 };
-
-export default AlertDialog;
