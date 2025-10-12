@@ -6,7 +6,11 @@ interface TagProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-const Tag: React.FC<TagProps> = ({ children, className = '', ...props }) => {
+export const Tag: React.FC<TagProps> = ({
+  children,
+  className = '',
+  ...props
+}) => {
   return (
     <span
       {...props}
@@ -16,5 +20,3 @@ const Tag: React.FC<TagProps> = ({ children, className = '', ...props }) => {
     </span>
   );
 };
-
-export default Tag;

@@ -1,7 +1,10 @@
 export * from './api/baseApi';
 export * from './api/interfaces';
 export { Error } from './pages/Error';
+export { Forbidden } from './pages/Forbidden';
 export { Loader } from './pages/Loader';
+export { MiniLoader } from './pages/MiniLoader';
+export { NoContent } from './pages/NoContent';
 export { NotFound } from './pages/NotFound';
 export { Notifications } from './pages/Notifications';
 export { Settings } from './pages/Settings';

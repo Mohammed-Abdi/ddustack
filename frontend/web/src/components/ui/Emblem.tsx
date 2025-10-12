@@ -9,7 +9,7 @@ interface EmblemProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-const Emblem: React.FC<EmblemProps> = ({
+export const Emblem: React.FC<EmblemProps> = ({
   children,
   className = '',
   color = '#ee384d',
@@ -33,5 +33,3 @@ const Emblem: React.FC<EmblemProps> = ({
     </div>
   );
 };
-
-export default Emblem;

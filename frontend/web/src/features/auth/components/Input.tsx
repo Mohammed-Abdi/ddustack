@@ -1,4 +1,4 @@
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { Eye, EyeClosed } from 'lucide-react';
 import * as React from 'react';
 

@@ -1,9 +1,12 @@
-export { default as AlertDialog } from './AlertDialog';
+export { AlertDialog } from './AlertDialog';
 export * from './avatar';
-export { default as Button } from './Button';
+export { Button } from './Button';
+export { Detail } from './Detail';
 export * from './dropdown-menu';
-export { default as Emblem } from './Emblem';
-export { default as NavLink } from './NavLink';
+export { Emblem } from './Emblem';
+export { NavLink } from './NavLink';
+export { SearchInput } from './SearchInput';
 export * from './skeleton';
-export { default as Tag } from './Tag';
+export * from './switch';
+export { Tag } from './Tag';
 export * from './tooltip';

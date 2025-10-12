@@ -72,7 +72,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        'relative flex cursor-pointer items-center gap-2 rounded-xl p-2.5 text-sm select-none outline-none',
+        'relative flex cursor-pointer items-center gap-2 rounded-xl p-2 text-sm select-none outline-none',
         'hover:bg-[var(--color-container)]',
         variant === 'destructive' &&
           'text-[var(--color-error)] hover:bg-[var(--color-error-muted)]',
@@ -94,7 +94,7 @@ function DropdownMenuCheckboxItem({
     <DropdownMenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
-        'relative flex cursor-pointer items-center gap-2 rounded-xl py-2.5 pr-2.5 pl-8 text-sm select-none outline-none',
+        'relative flex cursor-pointer items-center gap-2 rounded-xl py-2 pr-2 pl-8 text-sm select-none outline-none',
         'hover:bg-[var(--color-container)]',
         className
       )}
@@ -131,7 +131,7 @@ function DropdownMenuRadioItem({
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={cn(
-        'relative flex cursor-pointer items-center gap-2 rounded-xl py-2.5 pr-2.5 pl-8 text-sm select-none outline-none',
+        'relative flex cursor-pointer items-center gap-2 rounded-xl py-2 pr-2 pl-8 text-sm select-none outline-none',
         'hover:bg-[var(--color-container)]',
         className
       )}

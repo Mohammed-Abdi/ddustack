@@ -23,6 +23,7 @@ GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI")
 GITHUB_CLIENT_ID = os.environ.get("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET")
+RESET_PASSWORD_DEFAULT = os.environ.get("RESET_PASSWORD_DEFAULT")
 
 # -------------------------------
 # Installed Apps

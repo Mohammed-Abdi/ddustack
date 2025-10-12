@@ -39,9 +39,9 @@ const Home: React.FC = () => {
   if (isLoggingOut) return <Loader message="Logging out" />;
 
   return (
-    <main className="flex h-[100dvh]">
+    <main className="flex h-[100dvh] overflow-hidden">
       <Sidebar />
-      <section className="flex-1">
+      <section className="flex-1 flex flex-col">
         <Header>
           <div className="flex items-center">
             {isMobile && (
@@ -157,7 +157,7 @@ const Home: React.FC = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </Header>
-        <div className="w-full overflow-y-auto">
+        <div className="flex-1 overflow-y-auto">
           <Outlet />
         </div>
       </section>

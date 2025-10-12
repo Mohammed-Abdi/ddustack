@@ -1,4 +1,4 @@
-import Tag from '@/components/ui/Tag';
+import { Tag } from '@/components/ui/Tag';
 import {
   Tooltip,
   TooltipContent,
@@ -23,7 +23,7 @@ interface NavLinkProps {
 const parseHotKey = (hotKey: string) =>
   hotKey.split('+').map((k) => k.trim().toLowerCase());
 
-const NavLink: React.FC<NavLinkProps> = ({ nav }) => {
+export const NavLink: React.FC<NavLinkProps> = ({ nav }) => {
   const location = useLocation();
   const isMobile = useMediaQuery('mobile');
   const [isHovered, setIsHovered] = useState(false);
@@ -144,5 +144,3 @@ const NavLink: React.FC<NavLinkProps> = ({ nav }) => {
     </button>
   );
 };
-
-export default NavLink;

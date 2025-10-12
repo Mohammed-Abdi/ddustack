@@ -11,6 +11,7 @@ from .views import (
     RegisterView,
     UploadAvatarView,
     UserListView,
+    ResetPasswordView
 )
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path("users/me/avatar/", UploadAvatarView.as_view(), name="upload-avatar"),
     path("users/", UserListView.as_view(), name="user-list"),
     path("users/<uuid:user_id>/", AdminUserDetailView.as_view(), name="user-detail"),
+    path('users/reset-password/', ResetPasswordView.as_view(), name='reset-password'),
 ]

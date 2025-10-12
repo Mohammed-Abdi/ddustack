@@ -48,13 +48,9 @@ export const authApi = apiSlice.injectEndpoints({
         body: formData,
       }),
     }),
-
     oauthLogin: builder.mutation<
       LoginResponse,
-      {
-        provider: 'google' | 'github';
-        code?: string;
-      }
+      { provider: 'google' | 'github'; code?: string }
     >({
       query: ({ provider, ...body }) => ({
         url: `/auth/oauth/${provider}/`,
@@ -75,6 +71,59 @@ export const authApi = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    getUsers: builder.query<
+      {
+        results: User[];
+        count: number;
+        next: string | null;
+        previous: string | null;
+      },
+      {
+        search?: string;
+        page?: number;
+      }
+    >({
+      query: (params) => {
+        const query = new URLSearchParams();
+
+        if (params?.search) query.append('search', params.search);
+        if (params?.page) query.append('page', String(params.page));
+
+        const queryString = query.toString();
+        return {
+          url: `/users/${queryString ? `?${queryString}` : ''}`,
+          method: 'GET',
+        };
+      },
+    }),
+    getUser: builder.query<User, string>({
+      query: (userId) => ({
+        url: `/users/${userId}/`,
+        method: 'GET',
+      }),
+    }),
+    updateUser: builder.mutation<User, { userId: string; data: Partial<User> }>(
+      {
+        query: ({ userId, data }) => ({
+          url: `/users/${userId}/`,
+          method: 'PUT',
+          body: data,
+        }),
+      }
+    ),
+    deleteUser: builder.mutation<{ message: string }, string>({
+      query: (userId) => ({
+        url: `/users/${userId}/`,
+        method: 'DELETE',
+      }),
+    }),
+    resetPassword: builder.mutation<{ detail: string }, { user_id: string }>({
+      query: (body) => ({
+        url: '/users/reset-password/',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -83,12 +132,19 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useRefreshTokenMutation,
+  useMeQuery,
+  useLazyMeQuery,
   useUpdateMeMutation,
   useUploadAvatarMutation,
   useOauthLoginMutation,
-  useMeQuery,
   useCheckEmailQuery,
-  useLazyMeQuery,
   useLazyCheckEmailQuery,
   useLogoutMutation,
+  useGetUsersQuery,
+  useLazyGetUsersQuery,
+  useGetUserQuery,
+  useLazyGetUserQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+  useResetPasswordMutation,
 } = authApi;

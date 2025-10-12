@@ -2,7 +2,7 @@ import { Spinner } from '@/assets/animations/Spinner';
 import { Identification } from '@/assets/icons/Identification';
 import { LogoColored } from '@/assets/icons/Logo';
 import { Password } from '@/assets/icons/Password';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import type { ApiError } from '@/features/app/api/interfaces';
 import { type AppDispatch } from '@/store/store';
 import { normalizeCapitalization } from '@/utils/format';

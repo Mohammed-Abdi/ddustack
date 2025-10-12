@@ -1,15 +1,15 @@
 import { cn } from '@/lib/utils';
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import * as React from 'react';
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
   className?: string;
   variant?: 'primary' | 'outline' | 'link' | 'ghost' | 'destructive' | 'icon';
   type?: 'button' | 'submit' | 'reset';
 }
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   children,
   className,
   variant = 'primary',
@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
       variant === 'ghost',
     'px-4 py-2 text-sm outline-none bg-red-600 text-white hover:bg-red-700 disabled:hover:bg-red-400 disabled:bg-red-400':
       variant === 'destructive',
-    'w-10 h-10 outline-none hover:bg-[var(--color-hover)] disabled:hover:bg-[var(--color-border)] disabled:bg-[var(--color-border)]':
+    'w-10 h-10 rounded-lg outline-none hover:bg-[var(--color-hover)] disabled:hover:bg-[var(--color-border)] disabled:bg-[var(--color-border)]':
       variant === 'icon',
   });
 
@@ -46,5 +46,3 @@ const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
-
-export default Button;
