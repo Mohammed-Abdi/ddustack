@@ -1,6 +1,6 @@
 import { ErrorIcon, Outage } from '@/assets/icons/Error';
 import { Button } from '@/components/ui';
-import type React from 'react';
+import * as React from 'react';
 
 interface ErrorProps {
   message?: {
@@ -8,9 +8,10 @@ interface ErrorProps {
     sub?: string;
   };
   retry?: () => void;
+  icon?: React.ReactNode;
 }
 
-export const Error: React.FC<ErrorProps> = ({ message, retry }) => {
+export const Error: React.FC<ErrorProps> = ({ message, retry, icon }) => {
   const handleRetry = () => retry?.();
 
   return (
@@ -19,7 +20,7 @@ export const Error: React.FC<ErrorProps> = ({ message, retry }) => {
       className="flex flex-col items-center justify-center gap-5 absolute top-1/2 left-1/2 -translate-1/2"
     >
       {message ? (
-        <ErrorIcon className="w-20 h-20 opacity-80" />
+        icon ?? <ErrorIcon className="w-20 h-20 opacity-80" />
       ) : (
         <Outage className="w-20 h-20 opacity-80" />
       )}

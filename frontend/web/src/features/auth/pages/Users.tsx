@@ -1,3 +1,4 @@
+import { Desktop } from '@/assets/icons/Error';
 import {
   Button,
   DropdownMenu,
@@ -10,20 +11,15 @@ import {
   SearchInput,
   Switch,
 } from '@/components/ui';
-import { Forbidden, Loader, NoContent } from '@/features/app';
+import { Error, Forbidden, Loader, NoContent } from '@/features/app';
 import { useGetDepartmentsQuery, type Department } from '@/features/department';
+import { useMediaQuery } from '@/hooks';
 import { cn } from '@/lib/utils';
 import type { RootState } from '@/store/store';
 import { normalizeCapitalization } from '@/utils/format';
 import { formatNumber, getOrdinalSuffix } from '@/utils/numerals';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ListFilterIcon,
-  Plus,
-} from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
@@ -37,6 +33,7 @@ import {
 import UserCard from '../components/UserCard';
 
 export const Users: React.FC = () => {
+  const isMobile = useMediaQuery('mobile');
   const { accessToken, user: currentUser } = useSelector(
     (state: RootState) => state.auth
   );
@@ -132,6 +129,17 @@ export const Users: React.FC = () => {
 
   if (!['ADMIN'].includes(currentUser?.role as string)) return <Forbidden />;
 
+  if (isMobile)
+    return (
+      <Error
+        icon={<Desktop className="w-20 h-20 opacity-80" />}
+        message={{
+          main: 'Not available on mobile',
+          sub: 'Please use a desktop or laptop to manage users.',
+        }}
+      />
+    );
+
   return (
     <main className="flex flex-col h-[87dvh]">
       <div className="flex items-center justify-between p-5">
@@ -193,9 +201,9 @@ export const Users: React.FC = () => {
             onChange={setSearchTerm}
             placeholder="Search Users..."
           />
-          <Button variant="outline">
+          {/* <Button variant="outline">
             <ListFilterIcon className="size-4" /> Filter
-          </Button>
+          </Button> */}
           <Button onClick={() => setIsOpen(true)}>
             <Plus className="size-4" /> Add new User
           </Button>
