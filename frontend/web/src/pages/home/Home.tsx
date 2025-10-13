@@ -157,7 +157,7 @@ const Home: React.FC = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </Header>
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 relative overflow-y-auto">
           <Outlet />
         </div>
       </section>

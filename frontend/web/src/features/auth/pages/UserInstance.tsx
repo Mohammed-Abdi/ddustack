@@ -124,8 +124,7 @@ export const UserInstance: React.FC = () => {
   if (!currentUser || !['ADMIN'].includes(currentUser.role))
     return <Forbidden />;
 
-  if (isLoading || !user)
-    return <Loader full={false} message="Loading user profile" />;
+  if (isLoading || !user) return <Loader message="Loading user profile" />;
 
   return (
     <main className="relative flex flex-col gap-5">

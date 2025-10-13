@@ -12,12 +12,16 @@ export const authApi = apiSlice.injectEndpoints({
         }),
       }
     ),
-    register: builder.mutation<
-      LoginResponse,
-      { email: string; password: string; first_name: string; last_name: string }
-    >({
+    registerMe: builder.mutation<LoginResponse, Partial<User>>({
       query: (data) => ({
         url: '/auth/register/',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    registerUser: builder.mutation<LoginResponse, Partial<User>>({
+      query: (data) => ({
+        url: '/auth/admin/register/',
         method: 'POST',
         body: data,
       }),
@@ -130,7 +134,8 @@ export const authApi = apiSlice.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useRegisterMutation,
+  useRegisterMeMutation,
+  useRegisterUserMutation,
   useRefreshTokenMutation,
   useMeQuery,
   useLazyMeQuery,

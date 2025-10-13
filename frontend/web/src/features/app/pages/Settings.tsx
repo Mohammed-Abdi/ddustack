@@ -144,7 +144,7 @@ export const Settings: React.FC = () => {
     }
   };
 
-  if (isLoading) return <Loader full={false} />;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="relative flex flex-col gap-5">

@@ -17,3 +17,7 @@ export function getOrdinalSuffix(number: number): string {
       return number + 'th';
   }
 }
+
+export function formatNumber(num: number) {
+  return new Intl.NumberFormat('en', { notation: 'compact' }).format(num);
+}

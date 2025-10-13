@@ -1,6 +1,7 @@
 # type: ignore
 from django.contrib.auth import authenticate
 from rest_framework import serializers
+from django.conf import settings
 
 from .models import User
 
@@ -42,21 +43,32 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, min_length=8)
+    password = serializers.CharField(
+        write_only=True,
+        required=False,
+        min_length=8,
+        default=settings.REG_PASSWORD_DEFAULT,
+    )
 
     class Meta:
         model = User
         fields = [
-            "first_name",
-            "last_name",
-            "email",
-            "password",
-            "year",
-            "semester",
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+            'department',
+            'year',
+            'semester',
+            'role',
+            'is_active',
+            'is_verified',
         ]
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        password = validated_data.pop('password', settings.REG_PASSWORD_DEFAULT)
+        user = User.objects.create_user(password=password, **validated_data)
+        return user
 
 
 class LoginSerializer(serializers.Serializer):
