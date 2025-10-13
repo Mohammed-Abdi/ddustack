@@ -14,7 +14,7 @@ import {
   useLazyCheckEmailQuery,
   useLazyMeQuery,
   useLoginMutation,
-  useRegisterMutation,
+  useRegisterMeMutation,
 } from '../api/authApi';
 import { handleGithubAuth } from '../services/github';
 import { handleGoogleAuth } from '../services/google';
@@ -50,7 +50,7 @@ export const Form: React.FC = () => {
   const [checkEmail, { isFetching: isCheckingEmail }] =
     useLazyCheckEmailQuery();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
-  const [register, { isLoading: isRegistering }] = useRegisterMutation();
+  const [register, { isLoading: isRegistering }] = useRegisterMeMutation();
   const [fetchProfile] = useLazyMeQuery();
 
   const isLogin = emailSubmitted && userExists;

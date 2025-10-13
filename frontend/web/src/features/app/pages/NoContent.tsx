@@ -8,11 +8,9 @@ interface NoContentProps extends React.HTMLAttributes<HTMLElement> {
 
 export const NoContent: React.FC<NoContentProps> = ({ message, icon }) => {
   return (
-    <main className="flex items-center justify-center min-h-[85dvh]">
-      <div className="flex flex-col justify-center items-center gap-5">
-        {icon || <ErrorIcon className="w-15 h-15" />}
-        <p>{message || 'No content found'}</p>
-      </div>
-    </main>
+    <div className="absolute top-1/2 left-1/2 -translate-1/2 flex flex-col justify-center items-center gap-5">
+      {icon || <ErrorIcon className="w-15 h-15" />}
+      <p>{message || 'No content found'}</p>
+    </div>
   );
 };

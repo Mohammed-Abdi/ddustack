@@ -45,6 +45,18 @@ class RegisterView(generics.CreateAPIView):
         response.set_cookie(key="refresh_token", value=tokens["refresh_token"], httponly=True, secure=not settings.DEBUG, samesite="Lax", max_age=30 * 24 * 60 * 60)
         return response
 
+class AdminCreateUserView(generics.CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {"detail": "User created successfully."},
+            status=status.HTTP_201_CREATED
+        )
 
 class CheckEmailView(APIView):
     permission_classes = [AllowAny]
@@ -132,7 +144,6 @@ class AdminUserDetailView(APIView):
     def delete(self, request, user_id):
         self.get_object(user_id).delete()
         return Response({"message": "User deleted successfully."}, status=status.HTTP_200_OK)
-
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all().order_by("first_name", "last_name")

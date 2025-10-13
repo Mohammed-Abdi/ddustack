@@ -2,7 +2,7 @@
 @import './root.css';
 @import './fonts.css';
 @import './custom.css';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -18,6 +18,8 @@ button {
 body {
   background-color: var(--color-background);
   color: var(--color-text-primary);
+  position: relative;
+  min-height: 100dvh;
 }
 
 @theme inline {
