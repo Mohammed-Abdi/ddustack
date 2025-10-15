@@ -17,6 +17,9 @@ class ContentViewSet(viewsets.ModelViewSet):
     search_fields = ["title", "tags"]
     pagination_class = ContentPagination
 
+    def perform_create(self, serializer):
+        serializer.save(uploaded_by=self.request.user)
+
     def get_queryset(self):
         queryset = Content.objects.all().order_by("-created_at")
         course_id = self.request.query_params.get("courseId")

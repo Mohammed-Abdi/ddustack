@@ -1,3 +1,10 @@
+export * from './api/assignmentApi';
+export * from './api/courseApi';
+export * from './api/interfaces';
+export * from './api/offeringApi';
+export * from './api/savedCourseApi';
+export { CourseGrid } from './components/CourseGrid';
+export { ProfileSetup } from './components/ProfileSetup';
 export { CourseAssignments } from './pages/CourseAssignments';
 export { CourseAssignmentsInstance } from './pages/CourseAssignmentsInstance';
 export { CourseInstance } from './pages/CourseInstance';
