@@ -5,7 +5,7 @@ import { Toaster } from 'sonner';
 import { AlertDialog } from '@/components/ui';
 import { NotFound, Notifications, Settings } from '@/features/app';
 import { Auth, OAuthCallback, UserInstance, Users } from '@/features/auth';
-import { ContentInstance, Contents } from '@/features/content';
+import { ContentInstance, Contents, ForYouContents } from '@/features/content';
 import {
   CourseAssignments,
   CourseAssignmentsInstance,
@@ -80,6 +80,8 @@ const router = createBrowserRouter([
         element: <AppHome />,
         children: [
           { path: 'for-you', element: <ForYou /> },
+          { path: 'my-courses/:courseId', element: <ForYouContents /> },
+
           { path: 'summarizer', element: <Summarizer /> },
           { path: 'gpa-analyzer', element: <GpaAnalyzer /> },
           {
@@ -158,7 +160,14 @@ const router = createBrowserRouter([
               </RoleProtectedRoute>
             ),
           },
-          { path: 'courses/:courseId', element: <CourseInstance /> },
+          {
+            path: 'courses/:courseId',
+            element: (
+              <RoleProtectedRoute allowedRoles={['ADMIN']}>
+                <CourseInstance />
+              </RoleProtectedRoute>
+            ),
+          },
           {
             path: 'course-offerings',
             element: (

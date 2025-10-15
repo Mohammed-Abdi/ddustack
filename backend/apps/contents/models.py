@@ -3,6 +3,7 @@ from typing import Any
 
 from apps.courses.models import Course
 from django.db import models
+from apps.users.models import User
 from utils.normalization import normalize_capitalization
 
 
@@ -21,6 +22,13 @@ class Content(models.Model):
     chapter = models.CharField(max_length=255, blank=True, null=True)
     file = models.JSONField()  # type: ignore
     tags = models.JSONField(default=list, blank=True)  # type: ignore
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='uploaded_contents'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

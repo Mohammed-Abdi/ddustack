@@ -2,6 +2,9 @@ import { Gear, Menu } from '@/assets/icons/Setting';
 import { Verified } from '@/assets/icons/Verified';
 import { Header, Sidebar } from '@/components/layout';
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Button,
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,7 +15,6 @@ import {
   DropdownMenuTrigger,
   Tag,
 } from '@/components/ui';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader, openAlertDialog, toggleSidebar } from '@/features/app';
 import { useLogout } from '@/features/auth';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -157,7 +159,7 @@ const Home: React.FC = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </Header>
-        <div className="flex-1 relative overflow-y-auto">
+        <div className="flex-1 relative w-screen md:w-full overflow-y-auto">
           <Outlet />
         </div>
       </section>
