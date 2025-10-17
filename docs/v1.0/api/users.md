@@ -2,7 +2,7 @@
 
 **App Version:** v1.0  
 **Author:** Mohammed Abdi  
-**Date:** 2025-10-10  
+**Date:** 2025-10-13  
 **Status:** Updated
 
 ---
@@ -24,21 +24,22 @@ Base URL: `<baseurl>/v1/`
 
 ## 2. Endpoint Details
 
-| Endpoint                | Method | Auth Required  | Description                                |
-| ----------------------- | ------ | -------------- | ------------------------------------------ |
-| /auth/register/         | POST   | `no`           | Register a new user                        |
-| /auth/check-email/      | POST   | `no`           | Check if email already exists              |
-| /auth/login/            | POST   | `no`           | Authenticate user with email/password      |
-| /auth/oauth/<provider>/ | POST   | `no`           | Authenticate user with Google or GitHub    |
-| /auth/refresh/          | POST   | `yes (cookie)` | Refresh JWT access token using cookie      |
-| /auth/logout/           | POST   | `no`           | Logout user and clear refresh token cookie |
-| /users/me/              | GET    | `yes`          | Fetch current user profile                 |
-| /users/me/              | PUT    | `yes`          | Update current user profile                |
-| /users/me/avatar/       | POST   | `yes`          | Upload or update user avatar               |
-| /users/                 | GET    | `yes (admin)`  | List all users with pagination             |
-| /users/<uuid:user_id>/  | GET    | `yes (admin)`  | Fetch details of a specific user           |
-| /users/<uuid:user_id>/  | PUT    | `yes (admin)`  | Update user info                           |
-| /users/<uuid:user_id>/  | DELETE | `yes (admin)`  | Delete a user                              |
+| Endpoint                | Method | Auth Required  | Description                                  |
+| ----------------------- | ------ | -------------- | -------------------------------------------- |
+| /auth/register/         | POST   | `no`           | Register a new user                          |
+| /auth/check-email/      | POST   | `no`           | Check if email already exists                |
+| /auth/login/            | POST   | `no`           | Authenticate user with email/password        |
+| /auth/oauth/<provider>/ | POST   | `no`           | Authenticate user with Google or GitHub      |
+| /auth/refresh/          | POST   | `yes (cookie)` | Refresh JWT access token using cookie        |
+| /auth/logout/           | POST   | `no`           | Logout user and clear refresh token cookie   |
+| /users/me/              | GET    | `yes`          | Fetch current user profile                   |
+| /users/me/              | PUT    | `yes`          | Update current user profile                  |
+| /users/me/avatar/       | POST   | `yes`          | Upload or update user avatar                 |
+| /users/                 | GET    | `yes (admin)`  | List all users with pagination               |
+| /users/<uuid:user_id>/  | GET    | `yes (admin)`  | Fetch details of a specific user             |
+| /users/<uuid:user_id>/  | PUT    | `yes (admin)`  | Update user info                             |
+| /users/<uuid:user_id>/  | DELETE | `yes (admin)`  | Delete a user                                |
+| /auth/admin/register/   | POST   | `yes (admin)`  | Allows an admin to create a new user account |
 
 ---
 
@@ -184,7 +185,7 @@ or `/auth/oauth/github/`
 
 #### GET `/users/me/`
 
-Authorization: Bearer `<access_token>`
+> Authorization: Bearer `<access_token>`
 
 **Response** `200 OK`
 
@@ -214,7 +215,7 @@ Authorization: Bearer `<access_token>`
 
 #### PUT `/users/me/`
 
-Authorization: Bearer `<access_token>`
+> Authorization: Bearer `<access_token>`
 
 ```json
 {
@@ -252,8 +253,8 @@ Authorization: Bearer `<access_token>`
 
 #### POST `/users/me/avatar/`
 
-Authorization: Bearer `<access_token>`  
-Form-data: `avatar` file
+> Authorization: Bearer `<access_token>`  
+> Form-data: `avatar` file
 
 **Response** `200 OK`
 
@@ -271,7 +272,7 @@ Form-data: `avatar` file
 
 #### GET `/users/`
 
-Authorization: Bearer `<admin_access_token>`
+> Authorization: Bearer `<admin_access_token>`
 
 **Response** `200 OK` (Paginated)
 
@@ -304,7 +305,36 @@ Authorization: Bearer `<admin_access_token>`
 
 ---
 
-### 3.11 Admin: Get / Update / Delete User
+### 3.11 Admin: Register
+
+**Request**
+
+#### POST `/auth/admin/register/`
+
+> Authorization: Bearer `<admin_access_token>`
+
+```json
+{
+  "first_name": "Mohammed",
+  "last_name": "Abdi",
+  "email": "mohammed@example.com",
+  "password": "securePass123",
+  "role": "MODERATOR",
+  "is_verified": true
+}
+```
+
+**Response** `201 Created`
+
+```json
+{
+  "detail": "User created successfully."
+}
+```
+
+---
+
+### 3.12 Admin: Get / Update / Delete User
 
 **Request**
 
@@ -314,7 +344,7 @@ Authorization: Bearer `<admin_access_token>`
 
 #### DELETE `/users/<uuid:user_id>/`
 
-Authorization: Bearer `<admin_access_token>`
+> Authorization: Bearer `<admin_access_token>`
 
 **Response** `200 OK`
 
