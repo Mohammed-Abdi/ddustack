@@ -3,10 +3,10 @@ from django.db.models import Q
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Content
+from .models import Content, DownloadLog
 from .pagination import ContentPagination
 from .permissions import IsAdminOrModeratorOrReadOnly
-from .serializers import ContentSerializer
+from .serializers import ContentSerializer, DownloadLogSerializer
 
 
 class ContentViewSet(viewsets.ModelViewSet):
@@ -22,7 +22,7 @@ class ContentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Content.objects.all().order_by("-created_at")
-        course_id = self.request.query_params.get("courseId")
+        course_id = self.request.query_params.get("course_id")
         search = self.request.query_params.get("search")
 
         if course_id:
@@ -31,3 +31,19 @@ class ContentViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(Q(title__icontains=search) | Q(tags__icontains=search))
 
         return queryset.distinct()
+
+class DownloadLogViewSet(viewsets.ModelViewSet):
+    queryset = DownloadLog.objects.all().order_by("-created_at")
+    serializer_class = DownloadLogSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = ContentPagination
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        content_id = self.request.query_params.get("content_id")
+        if content_id:
+            queryset = queryset.filter(content_id=content_id)
+        return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

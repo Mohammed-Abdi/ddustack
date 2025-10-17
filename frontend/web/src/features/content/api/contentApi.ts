@@ -20,7 +20,7 @@ export const contentApi = apiSlice.injectEndpoints({
         const query = new URLSearchParams();
         if (params?.search) query.append('search', params.search);
         if (params?.page) query.append('page', String(params.page));
-        if (params?.courseId) query.append('courseId', params.courseId);
+        if (params?.courseId) query.append('course_id', params.courseId);
 
         const queryString = query.toString();
         return {

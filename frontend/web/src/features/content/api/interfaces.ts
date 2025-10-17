@@ -21,3 +21,11 @@ export interface Content {
   created_at: string;
   updated_at: string;
 }
+
+export interface DownloadLog {
+  id: string;
+  user: Partial<User>;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
