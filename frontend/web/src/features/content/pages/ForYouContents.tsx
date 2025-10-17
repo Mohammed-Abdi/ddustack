@@ -26,6 +26,10 @@ import {
 import { Loader } from '@/features/app';
 import { useGetContentsQuery, type Content } from '@/features/content';
 import {
+  useCreateDownloadLogMutation,
+  useGetDownloadLogsQuery,
+} from '@/features/content/api/downloadLogApi';
+import {
   useAddSavedCourseMutation,
   useDeleteSavedCourseMutation,
   useGetCourseQuery,
@@ -58,8 +62,16 @@ export const ForYouContents: React.FC = () => {
 
   const [addSavedCourse] = useAddSavedCourseMutation();
   const [deleteSavedCourse] = useDeleteSavedCourseMutation();
+  const [registerDownloadLog] = useCreateDownloadLogMutation();
   const [selectedContent, setSelectedContent] = React.useState<Content | null>(
     null
+  );
+
+  const { data: downloadLogData } = useGetDownloadLogsQuery(
+    { contentId: selectedContent?.id as string },
+    {
+      skip: !selectedContent,
+    }
   );
 
   const contents: Content[] = React.useMemo(
@@ -110,6 +122,14 @@ export const ForYouContents: React.FC = () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+
+    try {
+      await registerDownloadLog({
+        content: selectedContent?.id as string,
+      }).unwrap();
+    } catch {
+      console.warn('Failed to register download log');
+    }
   };
 
   const handleSubmitReport = (contentId: string) => {
@@ -294,19 +314,24 @@ export const ForYouContents: React.FC = () => {
               </div>
 
               <div className="flex items-center flex-wrap gap-5 text-sm font-medium">
-                <div className="flex items-center gap-1">
-                  <Box className="w-5 h-5" />
-                  {selectedContent.file.size} {selectedContent.file.unit}
-                </div>
-                <div className="flex items-center gap-1">
-                  <Folder className="w-5 h-5" />
-                  {selectedContent.file.extension}
-                </div>
-                <div className="flex items-center gap-1">
-                  <Download className="w-5 h-5" />
-                  {/* TODO: implement download logs then display downloads */}
-                  {formatNumber(1200)}
-                </div>
+                {selectedContent.file.size && (
+                  <div className="flex items-center gap-1">
+                    <Box className="w-5 h-5" />
+                    {selectedContent.file.size} {selectedContent.file.unit}
+                  </div>
+                )}
+                {selectedContent.file.extension && (
+                  <div className="flex items-center gap-1">
+                    <Folder className="w-5 h-5" />
+                    {selectedContent.file.extension}
+                  </div>
+                )}
+                {downloadLogData?.count ? (
+                  <div className="flex items-center gap-1">
+                    <Download className="w-5 h-5" />
+                    {formatNumber(downloadLogData?.count || 0)}
+                  </div>
+                ) : null}
               </div>
 
               <div className="mt-auto">
