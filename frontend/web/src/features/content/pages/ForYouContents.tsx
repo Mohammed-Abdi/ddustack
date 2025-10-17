@@ -36,6 +36,10 @@ import {
   useGetSavedCoursesQuery,
   type SavedCourse,
 } from '@/features/course';
+import {
+  useCreateIntakeMutation,
+  useIsContentReportedQuery,
+} from '@/features/intake';
 import { normalizeCapitalization } from '@/utils/format';
 import { formatNumber } from '@/utils/numerals';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -63,6 +67,7 @@ export const ForYouContents: React.FC = () => {
   const [addSavedCourse] = useAddSavedCourseMutation();
   const [deleteSavedCourse] = useDeleteSavedCourseMutation();
   const [registerDownloadLog] = useCreateDownloadLogMutation();
+  const [createIntake] = useCreateIntakeMutation();
   const [selectedContent, setSelectedContent] = React.useState<Content | null>(
     null
   );
@@ -73,6 +78,11 @@ export const ForYouContents: React.FC = () => {
       skip: !selectedContent,
     }
   );
+
+  const { data: isReported, isLoading: isReportedLoading } =
+    useIsContentReportedQuery(selectedContent?.id as string, {
+      skip: !selectedContent,
+    });
 
   const contents: Content[] = React.useMemo(
     () => contentsData?.results ?? [],
@@ -132,12 +142,23 @@ export const ForYouContents: React.FC = () => {
     }
   };
 
-  const handleSubmitReport = (contentId: string) => {
+  const handleSubmitReport = async (contentId: string) => {
     if (!contentId) return;
-    toast.success('Thank you for reporting!', {
-      description: 'Our team will review this file',
-    });
-    // TODO: implement intake posting for reports
+
+    try {
+      await createIntake({
+        type: 'COMPLAIN',
+        subject: 'Reported disabled download content',
+        content: contentId,
+        description: `Reported disabled download content ID: ${contentId}`,
+      }).unwrap();
+
+      toast.success('Thank you for reporting!', {
+        description: 'Our team will review this file',
+      });
+    } catch {
+      toast.error('Failed to submit report. Please try again.');
+    }
   };
 
   const getFileIcon = (ext: string) => {
@@ -340,14 +361,16 @@ export const ForYouContents: React.FC = () => {
                     label="Uploaded by"
                     user={selectedContent.uploaded_by}
                   />
-                  {!selectedContent.uploaded_by && (
-                    <Button
-                      onClick={() => handleSubmitReport(selectedContent.id)}
-                      variant="outline"
-                    >
-                      Report
-                    </Button>
-                  )}
+                  {!selectedContent.uploaded_by &&
+                    !isReportedLoading &&
+                    !isReported?.reported && (
+                      <Button
+                        onClick={() => handleSubmitReport(selectedContent.id)}
+                        variant="outline"
+                      >
+                        Report
+                      </Button>
+                    )}
                 </div>
 
                 {selectedContent.uploaded_by ? (

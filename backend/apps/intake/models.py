@@ -3,6 +3,8 @@ from typing import Any
 
 from apps.departments.models import Department
 from apps.users.models import User
+from apps.courses.models import Course
+from apps.contents.models import Content
 from django.db import models
 from utils.normalization import normalize_capitalization
 
@@ -26,6 +28,8 @@ class Intake(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="intakes")
+    course = models.ForeignKey(Course, null=True, blank=True, on_delete=models.SET_NULL, related_name="intakes")
+    content = models.ForeignKey(Content, null=True, blank=True, on_delete=models.SET_NULL, related_name="intakes")
     type = models.CharField(max_length=30, choices=Type.choices, default=Type.ACCESS)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,6 +40,7 @@ class Intake(models.Model):
     staff_id = models.CharField(max_length=50, null=True, blank=True)
     student_id = models.CharField(max_length=50, null=True, blank=True)
     department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.SET_NULL, related_name="intakes")
+    subject = models.CharField(max_length=150, null=False, blank=False, default='No Subject')
     description = models.TextField(null=True, blank=True)
 
     def save(self, *args: Any, **kwargs: Any) -> None:
