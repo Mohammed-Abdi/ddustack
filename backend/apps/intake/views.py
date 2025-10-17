@@ -22,7 +22,7 @@ class IntakeViewSet(viewsets.ModelViewSet):
     search_fields = ["full_name", "staff_id", "student_id"]
 
     def perform_create(self, serializer):
-        serializer.save(user_id=self.request.user)
+        serializer.save(user=self.request.user)
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny], url_path="check-user")
     def check_user(self, request):
@@ -35,3 +35,12 @@ class IntakeViewSet(viewsets.ModelViewSet):
             return Response({"exist": True, "status": intake.status})
         else:
             return Response({"exist": False, "status": None})
+        
+    @action(detail=False, methods=["get"], url_path="content-reported")
+    def content_reported(self, request):
+        content_id = request.query_params.get("content_id")
+        if not content_id:
+            return Response({"error": "content_id is required"}, status=400)
+
+        exists = Intake.objects.filter(content_id=content_id, type='COMPLAIN').exists()
+        return Response({"reported": exists})

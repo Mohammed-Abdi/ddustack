@@ -13,7 +13,10 @@ export type IntakeStatus = 'PENDING' | 'REJECTED' | 'APPROVED';
 
 export interface Intake {
   id: string;
-  user_id: string;
+  user: string;
+  subject: string;
+  course?: string | null;
+  content?: string | null;
   type: IntakeType;
   status: IntakeStatus;
   created_at: string;
@@ -22,6 +25,6 @@ export interface Intake {
   phone_number?: string | null;
   staff_id?: string | null;
   student_id?: string | null;
-  department_id?: string | null;
+  department?: string | null;
   description?: string | null;
 }

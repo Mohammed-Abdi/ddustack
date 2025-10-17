@@ -67,6 +67,13 @@ export const intakeApi = apiSlice.injectEndpoints({
         body,
       }),
     }),
+    isContentReported: builder.query<{ reported: boolean }, string>({
+      query: (contentId) => ({
+        url: `/intakes/content-reported/`,
+        method: 'GET',
+        params: { content_id: contentId },
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -79,4 +86,5 @@ export const {
   usePatchIntakeMutation,
   useDeleteIntakeMutation,
   useCheckUserMutation,
+  useIsContentReportedQuery,
 } = intakeApi;

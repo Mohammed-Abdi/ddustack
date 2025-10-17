@@ -2,16 +2,26 @@
 from rest_framework import serializers
 
 from .models import Intake
+from apps.users.models import User
 
+class UserSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'avatar', 'is_verified']
 
 class IntakeSerializer(serializers.ModelSerializer):
+    user = UserSummarySerializer(read_only=True)
+
     class Meta:
         model = Intake
         fields = [
             "id",
             "user",
+            "course",
+            "content",
             "type",
             "status",
+            "subject",
             "created_at",
             "updated_at",
             "full_name",
@@ -24,6 +34,9 @@ class IntakeSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "status", "created_at", "updated_at", "user"]
 
     def validate(self, data):
+        if not data.get("subject") and not getattr(self.instance, "subject", None):
+            raise serializers.ValidationError({"subject": "Subject is required."})
+
         request_type = data.get("type") or getattr(self.instance, "type", None)
 
         if request_type == "ACCESS":
@@ -35,26 +48,36 @@ class IntakeSerializer(serializers.ModelSerializer):
             if not data.get("staff_id") and not getattr(self.instance, "staff_id", None):
                 missing.append("staff_id")
             if missing:
-                raise serializers.ValidationError({field: f"{field} is required for ACCESS requests." for field in missing})
+                raise serializers.ValidationError(
+                    {field: f"{field} is required for ACCESS requests." for field in missing}
+                )
 
         elif request_type == "ROLE_CHANGE":
             if not data.get("description") and not getattr(self.instance, "description", None):
-                raise serializers.ValidationError({"description": "Description is required for ROLE_CHANGE requests."})
+                raise serializers.ValidationError(
+                    {"description": "Description is required for ROLE_CHANGE requests."}
+                )
 
         elif request_type == "DATA_UPDATE":
             pass
 
         elif request_type == "COURSE_ASSIGNMENT":
             if not data.get("staff_id") and not getattr(self.instance, "staff_id", None):
-                raise serializers.ValidationError({"staff_id": "Staff ID is required for COURSE_ASSIGNMENT requests."})
+                raise serializers.ValidationError(
+                    {"staff_id": "Staff ID is required for COURSE_ASSIGNMENT requests."}
+                )
 
         elif request_type == "COMPLAIN":
             if not data.get("description") and not getattr(self.instance, "description", None):
-                raise serializers.ValidationError({"description": "Description is required for COMPLAIN requests."})
+                raise serializers.ValidationError(
+                    {"description": "Description is required for COMPLAIN requests."}
+                )
 
         elif request_type == "FEEDBACK":
             if not data.get("description") and not getattr(self.instance, "description", None):
-                raise serializers.ValidationError({"description": "Description is required for FEEDBACK requests."})
+                raise serializers.ValidationError(
+                    {"description": "Description is required for FEEDBACK requests."}
+                )
 
         elif request_type == "LEAVE":
             missing = []
@@ -63,7 +86,9 @@ class IntakeSerializer(serializers.ModelSerializer):
             if not data.get("description") and not getattr(self.instance, "description", None):
                 missing.append("description")
             if missing:
-                raise serializers.ValidationError({field: f"{field} is required for LEAVE requests." for field in missing})
+                raise serializers.ValidationError(
+                    {field: f"{field} is required for LEAVE requests." for field in missing}
+                )
 
         elif request_type == "GRADE_REVIEW":
             missing = []
@@ -74,7 +99,9 @@ class IntakeSerializer(serializers.ModelSerializer):
             if not data.get("student_id") and not getattr(self.instance, "student_id", None):
                 missing.append("student_id")
             if missing:
-                raise serializers.ValidationError({field: f"{field} is required for GRADE_REVIEW requests." for field in missing})
+                raise serializers.ValidationError(
+                    {field: f"{field} is required for GRADE_REVIEW requests." for field in missing}
+                )
 
         elif request_type == "OTHER":
             pass
