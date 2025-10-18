@@ -32,6 +32,7 @@ class ContentViewSet(viewsets.ModelViewSet):
 
         return queryset.distinct()
 
+
 class DownloadLogViewSet(viewsets.ModelViewSet):
     queryset = DownloadLog.objects.all().order_by("-created_at")
     serializer_class = DownloadLogSerializer

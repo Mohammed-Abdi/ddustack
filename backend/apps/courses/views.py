@@ -2,25 +2,29 @@
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Course
-from .pagination import CoursePagination
+from .models import Course, CourseOffering, CourseAssignment
+from .pagination import StandardResultsSetPagination
 from .permissions import IsAdminOrModeratorOrReadOnly
-from .serializers import CourseSerializer
+from .serializers import (
+    CourseSerializer,
+    CourseOfferingSerializer,
+    CourseAssignmentSerializer,
+)
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all().order_by("-created_at")
+    queryset = Course.objects.all().order_by('-created_at')
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsAdminOrModeratorOrReadOnly]
     filter_backends = [filters.SearchFilter]
-    search_fields = ["code", "abbreviation", "tags"]
-    pagination_class = CoursePagination
+    search_fields = ['code', 'abbreviation', 'tags']
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        queryset = Course.objects.all().order_by("-created_at")
-        department_id = self.request.query_params.get("departmentId")
-        year = self.request.query_params.get("year")
-        semester = self.request.query_params.get("semester")
+        queryset = Course.objects.all().order_by('-created_at')
+        department_id = self.request.query_params.get('departmentId')
+        year = self.request.query_params.get('year')
+        semester = self.request.query_params.get('semester')
 
         if department_id:
             queryset = queryset.filter(course_offerings__department_id=department_id)
@@ -30,3 +34,48 @@ class CourseViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(course_offerings__semester=semester)
 
         return queryset.distinct()
+
+
+class CourseOfferingViewSet(viewsets.ModelViewSet):
+    queryset = CourseOffering.objects.all().order_by('-created_at')
+    serializer_class = CourseOfferingSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrModeratorOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['id']
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        queryset = CourseOffering.objects.all().order_by('-created_at')
+        department_id = self.request.query_params.get('departmentId')
+        year = self.request.query_params.get('year')
+        semester = self.request.query_params.get('semester')
+
+        if department_id:
+            queryset = queryset.filter(department_id=department_id)
+        if year:
+            queryset = queryset.filter(year=year)
+        if semester:
+            queryset = queryset.filter(semester=semester)
+
+        return queryset
+
+
+class CourseAssignmentViewSet(viewsets.ModelViewSet):
+    queryset = CourseAssignment.objects.all().order_by('-created_at')
+    serializer_class = CourseAssignmentSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrModeratorOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['user__first_name', 'user__last_name', 'course__code', 'course__name']
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        queryset = CourseAssignment.objects.all().order_by('-created_at')
+        user_id = self.request.query_params.get('userId')
+        course_id = self.request.query_params.get('courseId')
+
+        if user_id:
+            queryset = queryset.filter(user_id=user_id)
+        if course_id:
+            queryset = queryset.filter(course_id=course_id)
+
+        return queryset

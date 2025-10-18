@@ -1,8 +1,8 @@
 from django.urls import path
 
 from .views import (
-    AdminUserDetailView,
     AdminCreateUserView,
+    AdminUserDetailView,
     CheckEmailView,
     LoginView,
     LogoutView,
@@ -10,9 +10,9 @@ from .views import (
     OAuthLoginView,
     RefreshTokenView,
     RegisterView,
+    ResetPasswordView,
     UploadAvatarView,
     UserListView,
-    ResetPasswordView
 )
 
 urlpatterns = [
@@ -27,5 +27,5 @@ urlpatterns = [
     path("users/me/avatar/", UploadAvatarView.as_view(), name="upload-avatar"),
     path("users/", UserListView.as_view(), name="user-list"),
     path("users/<uuid:user_id>/", AdminUserDetailView.as_view(), name="user-detail"),
-    path('users/reset-password/', ResetPasswordView.as_view(), name='reset-password'),
+    path("users/reset-password/", ResetPasswordView.as_view(), name="reset-password"),
 ]

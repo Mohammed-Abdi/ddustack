@@ -1,7 +1,7 @@
 # type: ignore
+from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from django.conf import settings
 
 from .models import User
 
@@ -53,20 +53,20 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'first_name',
-            'last_name',
-            'email',
-            'password',
-            'department',
-            'year',
-            'semester',
-            'role',
-            'is_active',
-            'is_verified',
+            "first_name",
+            "last_name",
+            "email",
+            "password",
+            "department",
+            "year",
+            "semester",
+            "role",
+            "is_active",
+            "is_verified",
         ]
 
     def create(self, validated_data):
-        password = validated_data.pop('password', settings.REG_PASSWORD_DEFAULT)
+        password = validated_data.pop("password", settings.REG_PASSWORD_DEFAULT)
         user = User.objects.create_user(password=password, **validated_data)
         return user
 
