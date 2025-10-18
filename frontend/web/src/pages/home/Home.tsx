@@ -2,9 +2,6 @@ import { Gear, Menu } from '@/assets/icons/Setting';
 import { Verified } from '@/assets/icons/Verified';
 import { Header, Sidebar } from '@/components/layout';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Button,
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -13,6 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  ProfilePicture,
   Tag,
 } from '@/components/ui';
 import { Loader, openAlertDialog, toggleSidebar } from '@/features/app';
@@ -87,29 +85,15 @@ const Home: React.FC = () => {
 
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none">
-              <Avatar className="md:mr-2">
-                <AvatarImage src={user?.avatar ?? undefined} />
-                <AvatarFallback>
-                  <img
-                    src="/illustrations/pfp-fallback.webp"
-                    alt="default profile picture"
-                    className="w-full h-full"
-                  />
-                </AvatarFallback>
-              </Avatar>
+              <ProfilePicture
+                src={user?.avatar || undefined}
+                className="md:mr-2"
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel className="flex items-center gap-2.5">
-                <Avatar>
-                  <AvatarImage src={user?.avatar ?? undefined} />
-                  <AvatarFallback>
-                    <img
-                      src="/illustrations/pfp-fallback.webp"
-                      alt="default profile picture"
-                      className="w-full h-full"
-                    />
-                  </AvatarFallback>
-                </Avatar>
+                <ProfilePicture src={user?.avatar || undefined} />
+
                 <article>
                   <h1 className="flex items-center text-[15px] gap-1.5">
                     {user?.first_name}{' '}

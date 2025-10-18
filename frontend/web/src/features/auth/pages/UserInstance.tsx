@@ -1,9 +1,6 @@
 import Edit from '@/assets/icons/Setting';
 import { Verified } from '@/assets/icons/Verified';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Button,
   Detail,
   DropdownMenu,
@@ -13,6 +10,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  ProfilePicture,
   Switch,
 } from '@/components/ui';
 import { Forbidden, Loader } from '@/features/app';
@@ -129,18 +127,10 @@ export const UserInstance: React.FC = () => {
   return (
     <main className="relative flex flex-col gap-5">
       <div className="relative h-40 bg-[var(--color-container)]">
-        <Avatar className="w-32 h-32 absolute -bottom-16 left-5 border-4 border-[var(--color-background)] overflow-hidden bg-[var(--color-background)]">
-          <div className="relative w-full">
-            <AvatarImage src={user.avatar || undefined} />
-            <AvatarFallback className="flex items-center justify-center w-full h-full text-4xl font-medium">
-              <img
-                src="/illustrations/pfp-fallback.webp"
-                alt="default profile picture"
-                className="w-full h-full"
-              />
-            </AvatarFallback>
-          </div>
-        </Avatar>
+        <ProfilePicture
+          src={user.avatar || undefined}
+          className="w-32 h-32 absolute -bottom-16 left-5 border-4 border-[var(--color-background)] overflow-hidden bg-[var(--color-background)]"
+        />
       </div>
 
       <div className="px-5 pt-16 pb-5 flex justify-between items-start">

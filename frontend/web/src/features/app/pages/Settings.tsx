@@ -11,8 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   Emblem,
+  ProfilePicture,
 } from '@/components/ui';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { User } from '@/features/auth';
 import {
   updateUser,
@@ -53,7 +53,6 @@ export const Settings: React.FC = () => {
 
   const [formData, setFormData] = React.useState<Partial<User>>({});
   const [originalData, setOriginalData] = React.useState<Partial<User>>({});
-  const [isHovered, setIsHovered] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
   const selectedDepartmentRef = React.useRef<string | undefined>(
     user?.department
@@ -156,37 +155,11 @@ export const Settings: React.FC = () => {
           onChange={handleAvatarChange}
           accept="image/*"
         />
-        <label
-          htmlFor="avatarUpload"
-          className="w-full h-full cursor-pointer"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <Avatar className="w-32 h-32 absolute -bottom-16 left-5 border-4 border-[var(--color-background)] overflow-hidden bg-[var(--color-background)]">
-            <div className="relative w-full">
-              <AvatarImage src={user.avatar || undefined} />
-              <AvatarFallback className="flex items-center justify-center w-full h-full text-4xl font-medium">
-                <img
-                  src="/illustrations/pfp-fallback.webp"
-                  alt="default profile picture"
-                  className="w-full h-full"
-                />
-              </AvatarFallback>
-              <AnimatePresence>
-                {isHovered && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ ease: 'easeInOut' }}
-                    className="absolute inset-0 flex items-center justify-center bg-black/20"
-                  >
-                    <Edit className="text-white w-8 h-8" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </Avatar>
+        <label htmlFor="avatarUpload" className="w-full h-full cursor-pointer">
+          <ProfilePicture
+            src={user.avatar || undefined}
+            className="w-32 h-32 absolute -bottom-16 left-5 border-4 border-[var(--color-background)] overflow-hidden bg-[var(--color-background)]"
+          />
         </label>
       </div>
 
