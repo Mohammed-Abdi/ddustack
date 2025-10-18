@@ -1,10 +1,10 @@
 import uuid
 from typing import Any
 
+from apps.contents.models import Content
+from apps.courses.models import Course
 from apps.departments.models import Department
 from apps.users.models import User
-from apps.courses.models import Course
-from apps.contents.models import Content
 from django.db import models
 from utils.normalization import normalize_capitalization
 
@@ -40,7 +40,7 @@ class Intake(models.Model):
     staff_id = models.CharField(max_length=50, null=True, blank=True)
     student_id = models.CharField(max_length=50, null=True, blank=True)
     department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.SET_NULL, related_name="intakes")
-    subject = models.CharField(max_length=150, null=False, blank=False, default='No Subject')
+    subject = models.CharField(max_length=150, null=False, blank=False, default="No Subject")
     description = models.TextField(null=True, blank=True)
 
     def save(self, *args: Any, **kwargs: Any) -> None:

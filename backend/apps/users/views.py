@@ -5,8 +5,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token as google_id_token
-from rest_framework import generics, permissions, status
-from rest_framework import filters
+from rest_framework import filters, generics, permissions, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -19,8 +18,8 @@ from .serializers import (
     AdminUserSerializer,
     LoginSerializer,
     RegisterSerializer,
-    UserSerializer,
     ResetPasswordSerializer,
+    UserSerializer,
 )
 
 OAUTH_PROVIDERS = ("google", "github")
@@ -45,6 +44,7 @@ class RegisterView(generics.CreateAPIView):
         response.set_cookie(key="refresh_token", value=tokens["refresh_token"], httponly=True, secure=not settings.DEBUG, samesite="Lax", max_age=30 * 24 * 60 * 60)
         return response
 
+
 class AdminCreateUserView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -53,10 +53,8 @@ class AdminCreateUserView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(
-            {"detail": "User created successfully."},
-            status=status.HTTP_201_CREATED
-        )
+        return Response({"detail": "User created successfully."}, status=status.HTTP_201_CREATED)
+
 
 class CheckEmailView(APIView):
     permission_classes = [AllowAny]
@@ -145,13 +143,15 @@ class AdminUserDetailView(APIView):
         self.get_object(user_id).delete()
         return Response({"message": "User deleted successfully."}, status=status.HTTP_200_OK)
 
+
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all().order_by("first_name", "last_name")
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAdminUser]
     pagination_class = UserPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ['first_name', 'last_name', 'email', 'student_id', 'staff_id']
+    search_fields = ["first_name", "last_name", "email", "student_id", "staff_id"]
+
 
 class OAuthLoginView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -237,7 +237,8 @@ class LogoutView(APIView):
         response = Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
         response.delete_cookie("refresh_token")
         return response
-    
+
+
 class ResetPasswordView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
@@ -252,7 +253,4 @@ class ResetPasswordView(APIView):
         user.set_password(default_password)
         user.save(update_fields=["password"])
 
-        return Response(
-            {"detail": f"Password for {user.email} has been reset."},
-            status=status.HTTP_200_OK
-        )
+        return Response({"detail": f"Password for {user.email} has been reset."}, status=status.HTTP_200_OK)

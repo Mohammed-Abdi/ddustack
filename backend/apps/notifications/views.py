@@ -1,5 +1,5 @@
 # type: ignore
-from apps.course_offerings.models import CourseOffering
+from apps.courses.models import CourseOffering
 from apps.users.models import User
 from rest_framework import filters, status, viewsets
 from rest_framework.permissions import IsAuthenticated

@@ -48,8 +48,6 @@ INSTALLED_APPS = [
     "apps.schools",
     "apps.departments",
     "apps.courses",
-    "apps.course_offerings",
-    "apps.course_assignments",
     "apps.contents",
     "apps.notifications",
     "apps.saved_courses",

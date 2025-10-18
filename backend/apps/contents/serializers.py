@@ -1,13 +1,14 @@
-#type: ignore
-from rest_framework import serializers
-from .models import Content, DownloadLog
+# type: ignore
 from apps.users.models import User
+from rest_framework import serializers
+
+from .models import Content, DownloadLog
 
 
 class UserSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'avatar', 'is_verified']
+        fields = ["id", "first_name", "last_name", "email", "avatar", "is_verified"]
 
 
 class ContentSerializer(serializers.ModelSerializer):
@@ -29,7 +30,7 @@ class ContentSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "created_at", "updated_at", "uploaded_by"]
-        
+
 
 class DownloadLogSerializer(serializers.ModelSerializer):
     user = UserSummarySerializer(read_only=True)
@@ -37,10 +38,10 @@ class DownloadLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = DownloadLog
         fields = [
-            'id',
-            'user',
-            'content',
-            'created_at',
-            'updated_at',
+            "id",
+            "user",
+            "content",
+            "created_at",
+            "updated_at",
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at', 'user']
+        read_only_fields = ["id", "created_at", "updated_at", "user"]

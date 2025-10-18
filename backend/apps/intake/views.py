@@ -35,12 +35,12 @@ class IntakeViewSet(viewsets.ModelViewSet):
             return Response({"exist": True, "status": intake.status})
         else:
             return Response({"exist": False, "status": None})
-        
+
     @action(detail=False, methods=["get"], url_path="content-reported")
     def content_reported(self, request):
         content_id = request.query_params.get("content_id")
         if not content_id:
             return Response({"error": "content_id is required"}, status=400)
 
-        exists = Intake.objects.filter(content_id=content_id, type='COMPLAIN').exists()
+        exists = Intake.objects.filter(content_id=content_id, type="COMPLAIN").exists()
         return Response({"reported": exists})
