@@ -1,14 +1,12 @@
 import { Password } from '@/assets/icons/Password';
 import { User as UserIcon } from '@/assets/icons/User';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  ProfilePicture,
 } from '@/components/ui';
 import { openAlertDialog } from '@/features/app';
 import { useGetDepartmentQuery } from '@/features/department';
@@ -91,16 +89,7 @@ const UserCard: React.FC<UserCardProps> = ({
       {...props}
     >
       <article className="flex items-center gap-2 w-50">
-        <Avatar className="w-7 h-7">
-          <AvatarImage src={user?.avatar ?? undefined} />
-          <AvatarFallback className="w-7 h-7">
-            <img
-              src="/illustrations/pfp-fallback.webp"
-              alt="default profile picture"
-              className="w-full h-full"
-            />
-          </AvatarFallback>
-        </Avatar>
+        <ProfilePicture src={user.avatar || undefined} className="w-7 h-7" />
         <h1 className="flex items-center gap-1.5 truncate">
           {user.first_name} {user.last_name}
         </h1>

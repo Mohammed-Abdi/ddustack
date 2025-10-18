@@ -9,6 +9,7 @@ export * from './dropdown-menu';
 export { Emblem } from './Emblem';
 export { Item } from './Item';
 export { NavLink } from './NavLink';
+export { ProfilePicture } from './ProfilePicture';
 export * from './progress';
 export { SearchInput } from './SearchInput';
 export * from './skeleton';

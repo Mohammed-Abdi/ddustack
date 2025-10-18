@@ -1,6 +1,6 @@
 import { Incognito } from '@/assets/icons/User';
 import { Verified } from '@/assets/icons/Verified';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
+import { ProfilePicture } from '@/components/ui';
 import type { User } from '@/features/auth';
 import { cn } from '@/lib/utils';
 import { normalizeCapitalization } from '@/utils/format';
@@ -23,19 +23,10 @@ export const Credit: React.FC<CreditProps> = ({
       <span className="text-xs opacity-70">{label}</span>
       <div className="flex items-center gap-2">
         {user ? (
-          <Avatar className="w-7 h-7">
-            <AvatarImage src={user?.avatar ?? undefined} />
-            <AvatarFallback className="w-7 h-7">
-              <img
-                src="/illustrations/pfp-fallback.webp"
-                alt="default profile picture"
-                className="w-full h-full"
-              />
-            </AvatarFallback>
-          </Avatar>
+          <ProfilePicture src={user.avatar || undefined} className="w-7 h-7" />
         ) : (
-          <div className="flex items-center justify-center bg-[#303030] text-white w-7 h-7 rounded-full">
-            <Incognito className="w-4 h-4" />
+          <div className="flex items-center justify-center bg-[#303030] w-7 h-7 rounded-full">
+            <Incognito className="text-white w-2/3 h-2/3" />
           </div>
         )}
         <article className="flex flex-col">
@@ -46,7 +37,7 @@ export const Credit: React.FC<CreditProps> = ({
                 {normalizeCapitalization(user?.last_name || '')}
               </p>
             ) : (
-              <p className="text-[0.9375rem] font-medium">Anonymous user</p>
+              <p className="text-[0.9375rem] font-medium">Anonymous</p>
             )}
             {user?.is_verified && (
               <Verified className="w-3 h-3 text-[var(--color-info)]" />

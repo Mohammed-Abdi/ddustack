@@ -26,15 +26,8 @@ export function User(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       {...props}
     >
-      <g
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth={2}
-      >
-        <path d="M19.727 20.447c-.455-1.276-1.46-2.403-2.857-3.207S13.761 16 12 16s-3.473.436-4.87 1.24s-2.402 1.931-2.857 3.207"></path>
-        <circle cx={12} cy={8} r={4}></circle>
-      </g>
+      <circle cx={12} cy={6} r={4} fill="currentColor"></circle>
+      <ellipse cx={12} cy={17} fill="currentColor" rx={7} ry={4}></ellipse>
     </svg>
   );
 }
