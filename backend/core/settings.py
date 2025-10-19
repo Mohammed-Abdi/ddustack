@@ -25,6 +25,8 @@ GITHUB_CLIENT_ID = os.environ.get("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET")
 RESET_PASSWORD_DEFAULT = os.environ.get("RESET_PASSWORD_DEFAULT")
 REG_PASSWORD_DEFAULT = os.environ.get("REG_PASSWORD_DEFAULT")
+GEMINI_URL = os.environ.get("GEMINI_URL")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # -------------------------------
 # Installed Apps
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     "apps.notifications",
     "apps.saved_courses",
     "apps.intake",
+    "apps.summarizer",
 ]
 
 
