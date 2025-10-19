@@ -18,9 +18,9 @@ import {
 import { DepartmentInstance, Departments } from '@/features/department';
 import { Intake, IntakeInstance } from '@/features/intake';
 import { SchoolInstance, Schools } from '@/features/school';
+import { Summarizer } from '@/features/summarizer';
 import ForYou from '@/pages/home/components/ForYou';
 import GpaAnalyzer from '@/pages/home/components/GpaAnalyzer';
-import Summarizer from '@/pages/home/components/Summarizer';
 import UpgradeRole from '@/pages/home/components/UpgradeRole';
 import Home from '@/pages/home/Home';
 import Landing from '@/pages/landing/Landing';

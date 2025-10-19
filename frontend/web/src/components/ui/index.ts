@@ -13,6 +13,7 @@ export { ProfilePicture } from './ProfilePicture';
 export * from './progress';
 export { SearchInput } from './SearchInput';
 export * from './skeleton';
+export * from './slider';
 export * from './switch';
 export { Tag } from './Tag';
 export * from './tooltip';
