@@ -17,7 +17,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsAdminOrModeratorOrReadOnly]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['code', 'abbreviation', 'tags']
+    search_fields = ['name', 'code', 'abbreviation', 'tags']
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
