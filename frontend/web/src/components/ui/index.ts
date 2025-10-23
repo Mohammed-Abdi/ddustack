@@ -12,6 +12,7 @@ export { NavLink } from './NavLink';
 export { ProfilePicture } from './ProfilePicture';
 export * from './progress';
 export { SearchInput } from './SearchInput';
+export { SearchModal } from './SearchModal';
 export * from './skeleton';
 export * from './slider';
 export * from './switch';

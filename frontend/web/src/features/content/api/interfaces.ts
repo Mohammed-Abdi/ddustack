@@ -4,7 +4,7 @@ export type ContentType = 'LECTURE' | 'ASSIGNMENT' | 'LAB' | 'TUTORIAL';
 
 export interface ContentFile {
   extension: string;
-  size: number;
+  size: number | string;
   unit: string;
 }
 

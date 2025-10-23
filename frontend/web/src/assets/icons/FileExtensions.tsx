@@ -244,41 +244,18 @@ export function File(props: SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       width={24}
       height={24}
-      viewBox="0 0 256 256"
+      viewBox="0 0 24 24"
       {...props}
     >
       <g
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
-        strokeWidth={15.992}
+        strokeLinejoin="round"
+        strokeWidth={1.5}
       >
-        <path d="M 32,48 V 207.9236"></path>
-        <path strokeLinejoin="round" d="M 224,96 V 208"></path>
-        <path strokeLinejoin="round" d="m 64,16 h 80"></path>
-        <path d="M 64,240 H 192"></path>
-        <path
-          strokeLinejoin="round"
-          d="m 224,208 c 0.0874,15.98169 -16,32 -32,32"
-        ></path>
-        <path
-          strokeLinejoin="round"
-          d="m -32,208 c -10e-7,16 -16,32 -32,32"
-          transform="scale(-1 1)"
-        ></path>
-        <path
-          strokeLinejoin="round"
-          d="M -32,-47.976784 C -32,-32 -48,-16.356322 -63.999997,-16.000002"
-          transform="scale(-1)"
-        ></path>
-        <path strokeLinejoin="round" d="M 223.91257,96.071779 144,16"></path>
-        <path
-          strokeLinejoin="round"
-          d="m -144,64 c -0.0492,15.912926 -16.06452,31.999995 -32,32"
-          transform="scale(-1 1)"
-        ></path>
-        <path strokeLinejoin="round" d="M 144,64 V 16"></path>
-        <path strokeLinejoin="round" d="m 176,96 h 48"></path>
+        <path d="M15 2.5V4c0 1.414 0 2.121.44 2.56C15.878 7 16.585 7 18 7h1.5"></path>
+        <path d="M4 16V8c0-2.828 0-4.243.879-5.121C5.757 2 7.172 2 10 2h4.172c.408 0 .613 0 .797.076c.183.076.328.22.617.51l3.828 3.828c.29.29.434.434.51.618c.076.183.076.388.076.796V16c0 2.828 0 4.243-.879 5.121C18.243 22 16.828 22 14 22h-4c-2.828 0-4.243 0-5.121-.879C4 20.243 4 18.828 4 16m4-5h8m-8 3h8m-8 3h4.17"></path>
       </g>
     </svg>
   );
