@@ -378,7 +378,7 @@ export const Courses: React.FC = () => {
       </ul>
 
       <AnimatePresence>
-        {modal === 'new' && (
+        {modal && (
           <motion.div
             onClick={() => setModal(null)}
             initial={{ opacity: 0 }}
@@ -394,7 +394,7 @@ export const Courses: React.FC = () => {
               className="bg-[var(--color-background)] p-5 md:rounded-2xl shadow-lg w-full max-w-[720px] min-h-[60dvh] flex flex-col gap-4"
             >
               <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-                New Course
+                {modal === 'new' ? 'New Course' : 'Edit Course'}
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -407,8 +407,18 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.name || ''}
-                    onChange={(e) => handleNewForm('name', e.target.value)}
+                    value={
+                      modal === 'new'
+                        ? formData?.name || ''
+                        : editedData?.name || ''
+                    }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('name', e.target.value);
+                      } else {
+                        handleEditForm('name', e.target.value);
+                      }
+                    }}
                   />
                 </div>
 
@@ -421,8 +431,18 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.code || ''}
-                    onChange={(e) => handleNewForm('code', e.target.value)}
+                    value={
+                      modal === 'new'
+                        ? formData?.code || ''
+                        : editedData?.code || ''
+                    }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('code', e.target.value);
+                      } else {
+                        handleEditForm('code', e.target.value);
+                      }
+                    }}
                   />
                 </div>
 
@@ -435,10 +455,18 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.abbreviation || ''}
-                    onChange={(e) =>
-                      handleNewForm('abbreviation', e.target.value)
+                    value={
+                      modal === 'new'
+                        ? formData?.abbreviation || ''
+                        : editedData?.abbreviation || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('abbreviation', e.target.value);
+                      } else {
+                        handleEditForm('abbreviation', e.target.value);
+                      }
+                    }}
                   />
                 </div>
 
@@ -452,7 +480,9 @@ export const Courses: React.FC = () => {
                         variant="outline"
                         className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
                       >
-                        {formData?.status || 'Select Status'}
+                        {modal === 'new'
+                          ? formData?.status || 'Select Status'
+                          : editedData?.status || 'Select Status'}
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -463,10 +493,18 @@ export const Courses: React.FC = () => {
                       <DropdownMenuLabel>Select Status</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuRadioGroup
-                        value={formData?.status || ''}
-                        onValueChange={(value) =>
-                          handleNewForm('status', value)
+                        value={
+                          modal === 'new'
+                            ? formData?.status || ''
+                            : editedData?.status || ''
                         }
+                        onValueChange={(value) => {
+                          if (modal === 'new') {
+                            handleNewForm('status', value);
+                          } else {
+                            handleEditForm('status', value);
+                          }
+                        }}
                       >
                         {['COMPULSORY', 'SUPPORTIVE', 'COMMON', 'ELECTIVE'].map(
                           (status) => (
@@ -489,13 +527,22 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px] min-h-[80px]'
                     )}
-                    value={formData?.description || ''}
-                    onChange={(e) =>
-                      handleNewForm('description', e.target.value)
+                    value={
+                      modal === 'new'
+                        ? formData?.description || ''
+                        : editedData?.description || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('description', e.target.value);
+                      } else {
+                        handleEditForm('description', e.target.value);
+                      }
+                    }}
                   />
                 </div>
               </div>
+
               <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm text-[var(--color-text-muted)]">
@@ -507,10 +554,18 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.credit_points || ''}
-                    onChange={(e) =>
-                      handleNewForm('credit_points', Number(e.target.value))
+                    value={
+                      modal === 'new'
+                        ? formData?.credit_points || ''
+                        : editedData?.credit_points || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('credit_points', Number(e.target.value));
+                      } else {
+                        handleEditForm('credit_points', Number(e.target.value));
+                      }
+                    }}
                   />
                 </div>
 
@@ -524,10 +579,18 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.lab_hours || ''}
-                    onChange={(e) =>
-                      handleNewForm('lab_hours', Number(e.target.value))
+                    value={
+                      modal === 'new'
+                        ? formData?.lab_hours || ''
+                        : editedData?.lab_hours || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('lab_hours', Number(e.target.value));
+                      } else {
+                        handleEditForm('lab_hours', Number(e.target.value));
+                      }
+                    }}
                   />
                 </div>
 
@@ -541,10 +604,18 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.lecture_hours || ''}
-                    onChange={(e) =>
-                      handleNewForm('lecture_hours', Number(e.target.value))
+                    value={
+                      modal === 'new'
+                        ? formData?.lecture_hours || ''
+                        : editedData?.lecture_hours || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('lecture_hours', Number(e.target.value));
+                      } else {
+                        handleEditForm('lecture_hours', Number(e.target.value));
+                      }
+                    }}
                   />
                 </div>
 
@@ -558,10 +629,18 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.credit_hours || ''}
-                    onChange={(e) =>
-                      handleNewForm('credit_hours', Number(e.target.value))
+                    value={
+                      modal === 'new'
+                        ? formData?.credit_hours || ''
+                        : editedData?.credit_hours || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('credit_hours', Number(e.target.value));
+                      } else {
+                        handleEditForm('credit_hours', Number(e.target.value));
+                      }
+                    }}
                   />
                 </div>
 
@@ -575,10 +654,21 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.tutorial_hours || ''}
-                    onChange={(e) =>
-                      handleNewForm('tutorial_hours', Number(e.target.value))
+                    value={
+                      modal === 'new'
+                        ? formData?.tutorial_hours || ''
+                        : editedData?.tutorial_hours || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('tutorial_hours', Number(e.target.value));
+                      } else {
+                        handleEditForm(
+                          'tutorial_hours',
+                          Number(e.target.value)
+                        );
+                      }
+                    }}
                   />
                 </div>
 
@@ -592,10 +682,21 @@ export const Courses: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.homework_hours || ''}
-                    onChange={(e) =>
-                      handleNewForm('homework_hours', Number(e.target.value))
+                    value={
+                      modal === 'new'
+                        ? formData?.homework_hours || ''
+                        : editedData?.homework_hours || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('homework_hours', Number(e.target.value));
+                      } else {
+                        handleEditForm(
+                          'homework_hours',
+                          Number(e.target.value)
+                        );
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -606,9 +707,18 @@ export const Courses: React.FC = () => {
                 </label>
                 <div
                   className="flex flex-wrap gap-1 p-2.5 w-full min-h-16 bg-[var(--color-surface)] outline outline-[var(--color-container)] rounded-lg"
-                  onClick={() => handleFocus('new')}
+                  onClick={() => {
+                    if (modal === 'new') {
+                      handleFocus('new');
+                    } else {
+                      handleFocus('edit');
+                    }
+                  }}
                 >
-                  {(formData?.tags ?? []).map((tag) => (
+                  {(modal === 'new'
+                    ? formData?.tags ?? []
+                    : editedData?.tags ?? []
+                  ).map((tag) => (
                     <div
                       key={tag}
                       className="flex items-center h-fit px-2 py-0.5 text-sm bg-[var(--color-info-muted)] text-[var(--color-info)] gap-1 rounded-full"
@@ -617,14 +727,18 @@ export const Courses: React.FC = () => {
                       <X
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleRemoveTagNew(tag);
+                          if (modal === 'new') {
+                            handleRemoveTagNew(tag);
+                          } else {
+                            handleRemoveTagEdit(tag);
+                          }
                         }}
                         className="rounded-full text-white bg-[var(--color-info)] w-3 h-3"
                       />
                     </div>
                   ))}
                   <input
-                    ref={newTagInputRef}
+                    ref={modal === 'new' ? newTagInputRef : editTagInputRef}
                     className={cn(
                       'rounded-sm h-fit w-30 text-[var(--color-text-primary)] text-[15px]'
                     )}
@@ -633,279 +747,11 @@ export const Courses: React.FC = () => {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
-                        handleAddTagNew();
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-2 mt-4">
-                <Button variant="outline" onClick={() => setModal(null)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleNew}>Save</Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-
-        {modal && modal !== 'new' && (
-          <motion.div
-            onClick={() => setModal(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="fixed inset-0 bg-black/30 flex justify-center items-center z-50"
-          >
-            <motion.div
-              onClick={(e) => e.stopPropagation()}
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.15, ease: 'easeOut' }}
-              className="bg-[var(--color-background)] p-5 md:rounded-2xl shadow-lg w-full max-w-[720px] min-h-[60dvh] flex flex-col gap-4"
-            >
-              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-                Edit Course
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Name*
-                  </label>
-                  <input
-                    required
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.name || ''}
-                    onChange={(e) => handleEditForm('name', e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Code*
-                  </label>
-                  <input
-                    required
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.code || ''}
-                    onChange={(e) => handleEditForm('code', e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Abbreviation*
-                  </label>
-                  <input
-                    required
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.abbreviation || ''}
-                    onChange={(e) =>
-                      handleEditForm('abbreviation', e.target.value)
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Status*
-                  </label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
-                      >
-                        {editedData?.status || 'Select Status'}
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="max-h-60 overflow-y-auto"
-                      align="end"
-                    >
-                      <DropdownMenuLabel>Select Status</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuRadioGroup
-                        value={editedData?.status || ''}
-                        onValueChange={(value) =>
-                          handleEditForm('status', value)
+                        if (modal === 'new') {
+                          handleAddTagNew();
+                        } else {
+                          handleAddTagEdit();
                         }
-                      >
-                        {['COMPULSORY', 'SUPPORTIVE', 'COMMON', 'ELECTIVE'].map(
-                          (status) => (
-                            <DropdownMenuRadioItem key={status} value={status}>
-                              {status}
-                            </DropdownMenuRadioItem>
-                          )
-                        )}
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Description*
-                  </label>
-                  <textarea
-                    required
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px] min-h-[80px]'
-                    )}
-                    value={editedData?.description || ''}
-                    onChange={(e) =>
-                      handleEditForm('description', e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Credit Pts*
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.credit_points || ''}
-                    onChange={(e) =>
-                      handleEditForm('credit_points', Number(e.target.value))
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Lab Hrs*
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.lab_hours || ''}
-                    onChange={(e) =>
-                      handleEditForm('lab_hours', Number(e.target.value))
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Lecture Hrs*
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.lecture_hours || ''}
-                    onChange={(e) =>
-                      handleEditForm('lecture_hours', Number(e.target.value))
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Credit Hrs*
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.credit_hours || ''}
-                    onChange={(e) =>
-                      handleEditForm('credit_hours', Number(e.target.value))
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Tutorial Hrs*
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.tutorial_hours || ''}
-                    onChange={(e) =>
-                      handleEditForm('tutorial_hours', Number(e.target.value))
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Homework Hrs*
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.homework_hours || ''}
-                    onChange={(e) =>
-                      handleEditForm('homework_hours', Number(e.target.value))
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-[var(--color-text-muted)]">
-                  Tags*
-                </label>
-                <div
-                  className="flex flex-wrap gap-1 p-2.5 w-full min-h-16 bg-[var(--color-surface)] outline outline-[var(--color-container)] rounded-lg"
-                  onClick={() => handleFocus('edit')}
-                >
-                  {(editedData?.tags ?? []).map((tag) => (
-                    <div
-                      key={tag}
-                      className="flex items-center h-fit px-2 py-0.5 text-sm bg-[var(--color-info-muted)] text-[var(--color-info)] gap-1 rounded-full"
-                    >
-                      {tag}
-                      <X
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveTagEdit(tag);
-                        }}
-                        className="rounded-full text-white bg-[var(--color-info)] w-3 h-3"
-                      />
-                    </div>
-                  ))}
-                  <input
-                    ref={editTagInputRef}
-                    className={cn(
-                      'rounded-sm h-fit w-30 text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={currentTag}
-                    onChange={(e) => setCurrentTag(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleAddTagEdit();
                       }
                     }}
                   />
@@ -916,7 +762,16 @@ export const Courses: React.FC = () => {
                 <Button variant="outline" onClick={() => setModal(null)}>
                   Cancel
                 </Button>
-                <Button onClick={handleEdit} disabled={!hasChanges}>
+                <Button
+                  onClick={() => {
+                    if (modal === 'new') {
+                      handleNew();
+                    } else {
+                      handleEdit();
+                    }
+                  }}
+                  disabled={modal !== 'new' && !hasChanges}
+                >
                   Save
                 </Button>
               </div>

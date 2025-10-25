@@ -423,7 +423,7 @@ export const Contents: React.FC = () => {
       </ul>
 
       <AnimatePresence>
-        {modal === 'new' && (
+        {modal && (
           <motion.div
             onClick={() => setModal(null)}
             initial={{ opacity: 0 }}
@@ -439,7 +439,7 @@ export const Contents: React.FC = () => {
               className="bg-[var(--color-background)] p-5 md:rounded-2xl shadow-lg w-full max-w-[720px] min-h-[60dvh] flex flex-col gap-4"
             >
               <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-                New Content
+                {modal === 'new' ? 'New Content' : 'Edit Content'}
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -452,8 +452,18 @@ export const Contents: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.title || ''}
-                    onChange={(e) => handleNewForm('title', e.target.value)}
+                    value={
+                      modal === 'new'
+                        ? formData?.title || ''
+                        : editedData?.title || ''
+                    }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('title', e.target.value);
+                      } else {
+                        handleEditForm('title', e.target.value);
+                      }
+                    }}
                   />
                 </div>
 
@@ -466,8 +476,18 @@ export const Contents: React.FC = () => {
                     className={cn(
                       'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.path || ''}
-                    onChange={(e) => handleNewForm('path', e.target.value)}
+                    value={
+                      modal === 'new'
+                        ? formData?.path || ''
+                        : editedData?.path || ''
+                    }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('path', e.target.value);
+                      } else {
+                        handleEditForm('path', e.target.value);
+                      }
+                    }}
                   />
                 </div>
 
@@ -496,7 +516,9 @@ export const Contents: React.FC = () => {
                         variant="outline"
                         className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
                       >
-                        {formData?.type || 'Select Type'}
+                        {modal === 'new'
+                          ? formData?.type || 'Select Type'
+                          : editedData?.type || 'Select Type'}
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -507,8 +529,18 @@ export const Contents: React.FC = () => {
                       <DropdownMenuLabel>Select Type</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuRadioGroup
-                        value={formData?.type || ''}
-                        onValueChange={(value) => handleNewForm('type', value)}
+                        value={
+                          modal === 'new'
+                            ? formData?.type || ''
+                            : editedData?.type || ''
+                        }
+                        onValueChange={(value) => {
+                          if (modal === 'new') {
+                            handleNewForm('type', value);
+                          } else {
+                            handleEditForm('type', value);
+                          }
+                        }}
                       >
                         {['LECTURE', 'ASSIGNMENT', 'LAB', 'TUTORIAL'].map(
                           (type) => (
@@ -531,8 +563,18 @@ export const Contents: React.FC = () => {
                     className={cn(
                       'py-2 px-5 border border-[var(--color-border)] rounded-full w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.chapter || ''}
-                    onChange={(e) => handleNewForm('chapter', e.target.value)}
+                    value={
+                      modal === 'new'
+                        ? formData?.chapter || ''
+                        : editedData?.chapter || ''
+                    }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        handleNewForm('chapter', e.target.value);
+                      } else {
+                        handleEditForm('chapter', e.target.value);
+                      }
+                    }}
                   />
                 </div>
 
@@ -546,7 +588,9 @@ export const Contents: React.FC = () => {
                         variant="outline"
                         className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
                       >
-                        {formData?.file?.extension || 'Select file extension'}
+                        {modal === 'new'
+                          ? formData?.file?.extension || 'Select file extension'
+                          : editedData?.file?.extension || 'PDF'}
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -555,16 +599,30 @@ export const Contents: React.FC = () => {
                       align="end"
                     >
                       <DropdownMenuRadioGroup
-                        value={formData?.file?.extension || ''}
-                        onValueChange={(value) =>
-                          setFormData((cur) => ({
-                            ...(cur ?? {}),
-                            file: {
-                              ...(cur?.file ?? {}),
-                              extension: value,
-                            } as ContentFile,
-                          }))
+                        value={
+                          modal === 'new'
+                            ? formData?.file?.extension || ''
+                            : editedData?.file?.extension || 'PDF'
                         }
+                        onValueChange={(value) => {
+                          if (modal === 'new') {
+                            setFormData((cur) => ({
+                              ...(cur ?? {}),
+                              file: {
+                                ...(cur?.file ?? {}),
+                                extension: value,
+                              } as ContentFile,
+                            }));
+                          } else {
+                            setEditedData((cur) => ({
+                              ...(cur ?? {}),
+                              file: {
+                                ...(cur?.file ?? {}),
+                                extension: value,
+                              } as ContentFile,
+                            }));
+                          }
+                        }}
                       >
                         {[
                           'PDF',
@@ -599,16 +657,30 @@ export const Contents: React.FC = () => {
                     className={cn(
                       'py-2 px-5 border border-[var(--color-border)] rounded-full w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
                     )}
-                    value={formData?.file?.size || ''}
-                    onChange={(e) =>
-                      setFormData((cur) => ({
-                        ...(cur ?? {}),
-                        file: {
-                          ...(cur?.file ?? {}),
-                          size: e.target.value,
-                        } as ContentFile,
-                      }))
+                    value={
+                      modal === 'new'
+                        ? formData?.file?.size || ''
+                        : editedData?.file?.size || ''
                     }
+                    onChange={(e) => {
+                      if (modal === 'new') {
+                        setFormData((cur) => ({
+                          ...(cur ?? {}),
+                          file: {
+                            ...(cur?.file ?? {}),
+                            size: e.target.value,
+                          } as ContentFile,
+                        }));
+                      } else {
+                        setEditedData((cur) => ({
+                          ...(cur ?? {}),
+                          file: {
+                            ...(cur?.file ?? {}),
+                            size: e.target.value,
+                          } as ContentFile,
+                        }));
+                      }
+                    }}
                   />
                 </div>
 
@@ -622,7 +694,9 @@ export const Contents: React.FC = () => {
                         variant="outline"
                         className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
                       >
-                        {formData?.file?.unit || 'Select size unit'}
+                        {modal === 'new'
+                          ? formData?.file?.unit || 'Select size unit'
+                          : editedData?.file?.unit || 'MB'}
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -631,16 +705,30 @@ export const Contents: React.FC = () => {
                       align="end"
                     >
                       <DropdownMenuRadioGroup
-                        value={formData?.file?.unit || ''}
-                        onValueChange={(value) =>
-                          setFormData((cur) => ({
-                            ...(cur ?? {}),
-                            file: {
-                              ...(cur?.file ?? {}),
-                              unit: value,
-                            } as ContentFile,
-                          }))
+                        value={
+                          modal === 'new'
+                            ? formData?.file?.unit || ''
+                            : editedData?.file?.unit || 'MB'
                         }
+                        onValueChange={(value) => {
+                          if (modal === 'new') {
+                            setFormData((cur) => ({
+                              ...(cur ?? {}),
+                              file: {
+                                ...(cur?.file ?? {}),
+                                unit: value,
+                              } as ContentFile,
+                            }));
+                          } else {
+                            setEditedData((cur) => ({
+                              ...(cur ?? {}),
+                              file: {
+                                ...(cur?.file ?? {}),
+                                unit: value,
+                              } as ContentFile,
+                            }));
+                          }
+                        }}
                       >
                         {['KB', 'MB'].map((unit) => (
                           <DropdownMenuRadioItem key={unit} value={unit}>
@@ -659,289 +747,18 @@ export const Contents: React.FC = () => {
                 </label>
                 <div
                   className="flex flex-wrap gap-1 p-2.5 w-full min-h-16 bg-[var(--color-surface)] outline outline-[var(--color-container)] rounded-lg"
-                  onClick={() => handleFocus('new')}
-                >
-                  {(formData?.tags ?? []).map((tag) => (
-                    <div
-                      key={tag}
-                      className="flex items-center h-fit px-2 py-0.5 text-sm bg-[var(--color-info-muted)] text-[var(--color-info)] gap-1 rounded-full"
-                    >
-                      {tag}
-                      <X
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveTagNew(tag);
-                        }}
-                        className="rounded-full text-white bg-[var(--color-info)] w-3 h-3"
-                      />
-                    </div>
-                  ))}
-                  <input
-                    ref={newTagInputRef}
-                    className={cn(
-                      'rounded-sm h-fit w-30 text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={currentTag}
-                    onChange={(e) => setCurrentTag(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleAddTagNew();
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-2 mt-4">
-                <Button variant="outline" onClick={() => setModal(null)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleNew}>Save</Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-
-        {modal && modal !== 'new' && (
-          <motion.div
-            onClick={() => setModal(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="fixed inset-0 bg-black/30 flex justify-center items-center z-50"
-          >
-            <motion.div
-              onClick={(e) => e.stopPropagation()}
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.15, ease: 'easeOut' }}
-              className="bg-[var(--color-background)] p-5 md:rounded-2xl shadow-lg w-full max-w-[720px] min-h-[60dvh] flex flex-col gap-4"
-            >
-              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-                Edit Content
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Title*
-                  </label>
-                  <input
-                    required
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.title || ''}
-                    onChange={(e) => handleEditForm('title', e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Path*
-                  </label>
-                  <input
-                    required
-                    className={cn(
-                      'p-2 border border-[var(--color-border)] rounded-lg w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.path || ''}
-                    onChange={(e) => handleEditForm('path', e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Course*
-                  </label>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)] whitespace-nowrap"
-                    onClick={() => setIsOpen(true)}
-                  >
-                    <span className="w-full truncate">
-                      {selectedCourse?.abbreviation || 'Select Course'}
-                    </span>
-                  </Button>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Type*
-                  </label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
-                      >
-                        {editedData?.type || 'Select Type'}
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="max-h-60 overflow-y-auto"
-                      align="end"
-                    >
-                      <DropdownMenuLabel>Select Type</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuRadioGroup
-                        value={editedData?.type || ''}
-                        onValueChange={(value) => handleEditForm('type', value)}
-                      >
-                        {['LECTURE', 'ASSIGNMENT', 'LAB', 'TUTORIAL'].map(
-                          (type) => (
-                            <DropdownMenuRadioItem key={type} value={type}>
-                              {type}
-                            </DropdownMenuRadioItem>
-                          )
-                        )}
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Chapter*
-                  </label>
-                  <input
-                    required
-                    className={cn(
-                      'py-2 px-5 border border-[var(--color-border)] rounded-full w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.chapter || ''}
-                    onChange={(e) => handleEditForm('chapter', e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    File*
-                  </label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
-                      >
-                        {editedData?.file?.extension || 'PDF'}
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="max-h-60 overflow-y-auto"
-                      align="end"
-                    >
-                      <DropdownMenuRadioGroup
-                        value={editedData?.file?.extension || 'PDF'}
-                        onValueChange={(value) =>
-                          setEditedData((cur) => ({
-                            ...(cur ?? {}),
-                            file: {
-                              ...(cur?.file ?? {}),
-                              extension: value,
-                            } as ContentFile,
-                          }))
-                        }
-                      >
-                        {[
-                          'PDF',
-                          'DOC',
-                          'PPT',
-                          'PPTX',
-                          'XLS',
-                          'TXT',
-                          'JPG',
-                          'PNG',
-                          'SVG',
-                          'ZIP',
-                          'CSS',
-                          'SQL',
-                          'CPP',
-                        ].map((FileExt) => (
-                          <DropdownMenuRadioItem key={FileExt} value={FileExt}>
-                            {FileExt}
-                          </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Size*
-                  </label>
-                  <input
-                    required
-                    className={cn(
-                      'py-2 px-5 border border-[var(--color-border)] rounded-full w-full bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[15px]'
-                    )}
-                    value={editedData?.file?.size || ''}
-                    onChange={(e) =>
-                      setEditedData((cur) => ({
-                        ...(cur ?? {}),
-                        file: {
-                          ...(cur?.file ?? {}),
-                          size: e.target.value,
-                        } as ContentFile,
-                      }))
+                  onClick={() => {
+                    if (modal === 'new') {
+                      handleFocus('new');
+                    } else {
+                      handleFocus('edit');
                     }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-[var(--color-text-muted)]">
-                    Unit*
-                  </label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between bg-[var(--color-surface)] text-[var(--color-text-primary)]"
-                      >
-                        {editedData?.file?.unit || 'MB'}
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="max-h-60 overflow-y-auto"
-                      align="end"
-                    >
-                      <DropdownMenuRadioGroup
-                        value={editedData?.file?.unit || 'MB'}
-                        onValueChange={(value) =>
-                          setEditedData((cur) => ({
-                            ...(cur ?? {}),
-                            file: {
-                              ...(cur?.file ?? {}),
-                              unit: value,
-                            } as ContentFile,
-                          }))
-                        }
-                      >
-                        {['KB', 'MB'].map((unit) => (
-                          <DropdownMenuRadioItem key={unit} value={unit}>
-                            {unit}
-                          </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-[var(--color-text-muted)]">
-                  Tags*
-                </label>
-                <div
-                  className="flex flex-wrap gap-1 p-2.5 w-full min-h-16 bg-[var(--color-surface)] outline outline-[var(--color-container)] rounded-lg"
-                  onClick={() => handleFocus('edit')}
+                  }}
                 >
-                  {(editedData?.tags ?? []).map((tag) => (
+                  {(modal === 'new'
+                    ? formData?.tags ?? []
+                    : editedData?.tags ?? []
+                  ).map((tag) => (
                     <div
                       key={tag}
                       className="flex items-center h-fit px-2 py-0.5 text-sm bg-[var(--color-info-muted)] text-[var(--color-info)] gap-1 rounded-full"
@@ -950,14 +767,18 @@ export const Contents: React.FC = () => {
                       <X
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleRemoveTagEdit(tag);
+                          if (modal === 'new') {
+                            handleRemoveTagNew(tag);
+                          } else {
+                            handleRemoveTagEdit(tag);
+                          }
                         }}
                         className="rounded-full text-white bg-[var(--color-info)] w-3 h-3"
                       />
                     </div>
                   ))}
                   <input
-                    ref={editTagInputRef}
+                    ref={modal === 'new' ? newTagInputRef : editTagInputRef}
                     className={cn(
                       'rounded-sm h-fit w-30 text-[var(--color-text-primary)] text-[15px]'
                     )}
@@ -966,7 +787,11 @@ export const Contents: React.FC = () => {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
-                        handleAddTagEdit();
+                        if (modal === 'new') {
+                          handleAddTagNew();
+                        } else {
+                          handleAddTagEdit();
+                        }
                       }
                     }}
                   />
@@ -977,7 +802,16 @@ export const Contents: React.FC = () => {
                 <Button variant="outline" onClick={() => setModal(null)}>
                   Cancel
                 </Button>
-                <Button onClick={handleEdit} disabled={!hasChanges}>
+                <Button
+                  onClick={() => {
+                    if (modal === 'new') {
+                      handleNew();
+                    } else {
+                      handleEdit();
+                    }
+                  }}
+                  disabled={modal !== 'new' && !hasChanges}
+                >
                   Save
                 </Button>
               </div>
