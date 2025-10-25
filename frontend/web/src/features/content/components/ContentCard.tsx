@@ -44,7 +44,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       method: (content: Content) =>
         dispatch(
           openAlertDialog({
-            title: 'Delete User',
+            title: 'Delete Content',
             description: `Permanently remove ${content.title}?`,
             subDescription: `This action cannot be undone.`,
             action: {
