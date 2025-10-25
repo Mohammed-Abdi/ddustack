@@ -12,9 +12,9 @@ import {
   Courses,
   SavedCourses,
 } from '@/features/course';
-import { DepartmentInstance, Departments } from '@/features/department';
+import { Departments } from '@/features/department';
 import { Intake, IntakeInstance } from '@/features/intake';
-import { SchoolInstance, Schools } from '@/features/school';
+import { Schools } from '@/features/school';
 import { Summarizer } from '@/features/summarizer';
 import ForYou from '@/pages/home/components/ForYou';
 import GpaAnalyzer from '@/pages/home/components/GpaAnalyzer';
@@ -126,26 +126,10 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: 'schools/:schoolId',
-            element: (
-              <RoleProtectedRoute allowedRoles={['ADMIN']}>
-                <SchoolInstance />
-              </RoleProtectedRoute>
-            ),
-          },
-          {
             path: 'departments',
             element: (
               <RoleProtectedRoute allowedRoles={['ADMIN']}>
                 <Departments />
-              </RoleProtectedRoute>
-            ),
-          },
-          {
-            path: 'departments/:departmentId',
-            element: (
-              <RoleProtectedRoute allowedRoles={['ADMIN']}>
-                <DepartmentInstance />
               </RoleProtectedRoute>
             ),
           },

@@ -1,4 +1,4 @@
 export * from './api/departmentApi';
 export * from './api/interfaces';
-export { DepartmentInstance } from './pages/DepartmentInstance';
+export { DepartmentCard } from './components/DepartmentCard';
 export { Departments } from './pages/Departments';
