@@ -45,8 +45,8 @@ export const Detail: React.FC<DetailProps> = ({
       className={cn('flex items-center justify-between gap-2', className)}
       {...props}
     >
-      <div className="flex-1 min-w-0">
-        <span className="text-sm text-[var(--color-text-muted)]">{label}</span>
+      <article className="flex-1 min-w-0">
+        <label className="text-xs text-(--color-text-muted)">{label}</label>
         <div className="flex items-center gap-1 truncate">
           <p className={cn('truncate', truncate && 'truncate')}>
             {value || '—'}
@@ -68,7 +68,7 @@ export const Detail: React.FC<DetailProps> = ({
             </Tooltip>
           )}
         </div>
-      </div>
+      </article>
     </div>
   );
 };

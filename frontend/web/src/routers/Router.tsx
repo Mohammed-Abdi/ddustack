@@ -5,13 +5,10 @@ import { Toaster } from 'sonner';
 import { AlertDialog } from '@/components/ui';
 import { NotFound, Notifications, Settings } from '@/features/app';
 import { Auth, OAuthCallback, UserInstance, Users } from '@/features/auth';
-import { ContentInstance, Contents, ForYouContents } from '@/features/content';
+import { Contents, ForYouContents } from '@/features/content';
 import {
   CourseAssignments,
-  CourseAssignmentsInstance,
-  CourseInstance,
   CourseOfferings,
-  CourseOfferingsInstance,
   Courses,
   SavedCourses,
 } from '@/features/course';
@@ -161,14 +158,6 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: 'courses/:courseId',
-            element: (
-              <RoleProtectedRoute allowedRoles={['ADMIN']}>
-                <CourseInstance />
-              </RoleProtectedRoute>
-            ),
-          },
-          {
             path: 'course-offerings',
             element: (
               <RoleProtectedRoute allowedRoles={['ADMIN']}>
@@ -177,26 +166,10 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: 'course-offerings/:courseOfferingId',
-            element: (
-              <RoleProtectedRoute allowedRoles={['ADMIN']}>
-                <CourseOfferingsInstance />
-              </RoleProtectedRoute>
-            ),
-          },
-          {
             path: 'course-assignments',
             element: (
               <RoleProtectedRoute allowedRoles={['ADMIN']}>
                 <CourseAssignments />
-              </RoleProtectedRoute>
-            ),
-          },
-          {
-            path: 'course-assignments/:courseAssignmentId',
-            element: (
-              <RoleProtectedRoute allowedRoles={['ADMIN']}>
-                <CourseAssignmentsInstance />
               </RoleProtectedRoute>
             ),
           },
@@ -218,7 +191,6 @@ const router = createBrowserRouter([
               </RoleProtectedRoute>
             ),
           },
-          { path: 'contents/:contentId', element: <ContentInstance /> },
           {
             path: 'upgrade-role',
             element: (
